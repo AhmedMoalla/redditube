@@ -18,6 +18,7 @@ public class OAuthLoginServerConfiguration {
         http.authorizeExchange().anyExchange().authenticated();
         http.csrf().disable();
         http.oauth2Login();
+        http.oauth2ResourceServer().jwt();
         return http.build();
     }
 }
