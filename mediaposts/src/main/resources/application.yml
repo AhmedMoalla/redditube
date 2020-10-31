@@ -1,0 +1,6 @@
+spring:
+  profiles:
+    active: oauth
+
+server:
+  port: 8082

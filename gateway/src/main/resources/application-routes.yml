@@ -1,0 +1,25 @@
+spring:
+  cloud:
+    gateway:
+      httpclient:
+        connect-timeout: 5000
+        response-timeout: 5s
+      routes:
+        - id: "ExploreUsers"
+          uri: "http://localhost:8081"
+          predicates:
+            - Path=/u/**
+          filters:
+            - StripPrefix=1
+        #        - name: CircuitBreaker
+        #            args:
+        #              name: fallback
+        #              fallbackUri: forward:/fallback
+        - id: "Posts"
+          uri: "http://localhost:8082"
+          predicates:
+            - Path=/posts/**
+          filters:
+            - StripPrefix=1
+      default-filters:
+        - RemoveRequestHeader=Cookie

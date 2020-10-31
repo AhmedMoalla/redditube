@@ -1,0 +1,13 @@
+<databaseChangeLog
+        xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
+        xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+        xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog
+   http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-3.4.xsd">
+
+    <changeSet id="1-MODEL-create-user-table" author="amoalla">
+        <sqlFile path="./src/main/resources/sql-files/1-MODEL-create-user-table.sql"/>
+        <rollback>
+            <dropTable tableName="redditube_user"/>
+        </rollback>
+    </changeSet>
+</databaseChangeLog>

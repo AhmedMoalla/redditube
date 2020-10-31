@@ -1,0 +1,28 @@
+spring:
+  profiles:
+    active: routes,oauth
+  application:
+    name: gateway
+  datasource:
+    username: postgres
+    password: 98578652
+    url: jdbc:postgresql://localhost:5432/redditube
+
+management:
+  endpoints:
+    web:
+      exposure:
+        include: "*" # TODO Expose only needed on prod
+
+server:
+  port: 8080
+
+dex:
+  host: localhost
+  port: 5557
+
+#logging.level:
+#  org.springframework.web: DEBUG
+#  org.springframework.cloud.gateway: TRACE
+#  org.springframework.security: DEBUG
+#  org.springframework.web.reactive.function.client: TRACE
