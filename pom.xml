@@ -22,7 +22,7 @@
         <module>gateway</module>
         <module>mediaposts</module>
         <module>liquibase-migrations</module>
-        <module>common-lib</module>
+        <module>commons</module>
     </modules>
 
     <properties>

@@ -1,0 +1,8 @@
+spring:
+  main:
+    banner-mode: off
+
+# Disable Spring Security default password logging
+logging:
+  level:
+    org.springframework.boot.autoconfigure.security.reactive.ReactiveUserDetailsServiceAutoConfiguration: off

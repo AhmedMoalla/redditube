@@ -21,6 +21,13 @@
             <version>0.0.1-SNAPSHOT</version>
         </dependency>
 
+        <!-- Common Library -->
+        <dependency>
+            <groupId>com.amoalla.redditube</groupId>
+            <artifactId>commons</artifactId>
+            <version>0.0.1-SNAPSHOT</version>
+        </dependency>
+
         <!-- Web -->
         <dependency>
             <groupId>org.springframework.boot</groupId>
