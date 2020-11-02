@@ -1,8 +1,8 @@
 package com.amoalla.redditube.client.impl;
 
-import com.amoalla.redditube.client.MediaPost;
-import com.amoalla.redditube.client.Sort;
-import com.fasterxml.jackson.databind.JsonNode;
+import com.amoalla.redditube.client.model.MediaPost;
+import com.amoalla.redditube.client.model.MediaPostListings;
+import com.amoalla.redditube.client.model.Sort;
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;
 import org.springframework.web.reactive.function.client.WebClient;
@@ -44,7 +44,6 @@ public class MediaPostRequester {
 
     private final Type type;
     private final WebClient webClient;
-    private final MediaPostParser parser = new MediaPostParser();
 
     private int limit = 10;
     private String after = "";
@@ -85,8 +84,8 @@ public class MediaPostRequester {
                 .get()
                 .uri(builder -> buildURI(builder, usernameOrSubreddit))
                 .retrieve()
-                .bodyToMono(JsonNode.class)
-                .flatMapMany(parser::parse);
+                .bodyToMono(MediaPostListings.class)
+                .flatMapIterable(MediaPostListings::getMediaPosts);
     }
 
     private URI buildURI(UriBuilder builder, String usernameOrSubreddit) {

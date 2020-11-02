@@ -1,5 +1,7 @@
-package com.amoalla.redditube.client;
+package com.amoalla.redditube.client.model;
 
+import com.amoalla.redditube.client.model.deserializer.MediaPostDeserializer;
+import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
 import lombok.Builder;
 import lombok.Data;
 
@@ -7,6 +9,7 @@ import java.time.LocalDateTime;
 
 @Data
 @Builder
+@JsonDeserialize(using = MediaPostDeserializer.class)
 public class MediaPost {
     private final String id;
     private final String mediaUrl;
