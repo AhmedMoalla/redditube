@@ -7,7 +7,6 @@ import com.amoalla.redditube.gateway.entity.RedditubeUser;
 import com.amoalla.redditube.gateway.exception.UserAlreadyExistsException;
 import com.amoalla.redditube.gateway.service.UserService;
 import org.modelmapper.ModelMapper;
-import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.bind.support.WebExchangeBindException;
 import reactor.core.publisher.Mono;
@@ -28,7 +27,7 @@ public class UserRestController {
     }
 
     @PostMapping
-    public Mono<RegistrationResponseDto> registerUser(@Valid @RequestBody Mono<UserDto> userDto) throws UserAlreadyExistsException {
+    public Mono<RegistrationResponseDto> registerUser(@Valid @RequestBody Mono<UserDto> userDto) {
         return userDto.map(dto -> Tuples.of(modelMapper.map(dto, RedditubeUser.class), dto.getPassword()))
                 .flatMap(tuple -> userService.registerUser(tuple.getT1(), tuple.getT2()))
                 .map(newUser -> modelMapper.map(newUser, RegisteredUserDto.class))
