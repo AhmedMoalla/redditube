@@ -3,6 +3,8 @@ spring:
     active: routes,oauth
   application:
     name: gateway
+  autoconfigure:
+    exclude: org.springframework.cloud.security.oauth2.gateway.TokenRelayAutoConfiguration
   datasource:
     username: postgres
     password: 98578652
