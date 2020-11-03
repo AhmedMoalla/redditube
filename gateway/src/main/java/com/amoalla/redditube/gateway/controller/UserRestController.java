@@ -27,7 +27,7 @@ public class UserRestController {
     }
 
     @PostMapping
-    public Mono<RegistrationResponseDto> registerUser(@Valid @RequestBody Mono<UserDto> userDto) throws UserAlreadyExistsException {
+    public Mono<RegistrationResponseDto> registerUser(@Valid @RequestBody Mono<UserDto> userDto) {
         return userDto.map(dto -> Tuples.of(modelMapper.map(dto, RedditubeUser.class), dto.getPassword()))
                 .flatMap(tuple -> userService.registerUser(tuple.getT1(), tuple.getT2()))
                 .map(newUser -> modelMapper.map(newUser, RegisteredUserDto.class))

@@ -1,8 +1,8 @@
 package com.amoalla.redditube.client.impl;
 
 import com.amoalla.redditube.client.RedditClient;
-import com.amoalla.redditube.client.MediaPost;
-import com.amoalla.redditube.client.Sort;
+import com.amoalla.redditube.client.model.MediaPost;
+import com.amoalla.redditube.client.model.Sort;
 import reactor.core.publisher.Flux;
 
 /**

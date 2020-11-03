@@ -1,6 +1,6 @@
 package com.amoalla.redditube.mediaposts.service;
 
-import com.amoalla.redditube.client.MediaPost;
+import com.amoalla.redditube.client.model.MediaPost;
 import com.amoalla.redditube.mediaposts.entity.Subscribable;
 import com.amoalla.redditube.mediaposts.entity.Subscription;
 import com.amoalla.redditube.mediaposts.repository.SubscribableRepository;

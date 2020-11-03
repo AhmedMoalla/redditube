@@ -1,8 +1,8 @@
 package com.amoalla.redditube.explore.controller;
 
-import com.amoalla.redditube.client.MediaPost;
+import com.amoalla.redditube.client.model.MediaPost;
 import com.amoalla.redditube.client.RedditClient;
-import com.amoalla.redditube.client.Sort;
+import com.amoalla.redditube.client.model.Sort;
 import com.amoalla.redditube.explore.controller.param.RequestParams;
 import com.amoalla.redditube.explore.util.CaseInsensitiveEnumEditor;
 import lombok.extern.slf4j.Slf4j;
@@ -34,7 +34,7 @@ public class ExploreRestController {
         log.info("Received GET /{} with params: {}", usernameOrSubreddit, params);
         if (!StringUtils.isEmpty(params.getAfter())) {
             return redditClient.getPostsAfter(usernameOrSubreddit, params.getAfter(), params.getLimit());
-        } else if (!StringUtils.isEmpty(params.getAfter())) {
+        } else if (!StringUtils.isEmpty(params.getBefore())) {
             return redditClient.getPostsBefore(usernameOrSubreddit, params.getBefore(), params.getLimit());
         }
         return redditClient.getPosts(usernameOrSubreddit, params.getLimit());
@@ -49,7 +49,7 @@ public class ExploreRestController {
         log.info("Received GET /{} with sort: {} and params: {}", usernameOrSubreddit, sort, params);
         if (!StringUtils.isEmpty(params.getAfter())) {
             return redditClient.getPostsAfter(usernameOrSubreddit, params.getAfter(), sort, params.getLimit());
-        } else if (!StringUtils.isEmpty(params.getAfter())) {
+        } else if (!StringUtils.isEmpty(params.getBefore())) {
             return redditClient.getPostsBefore(usernameOrSubreddit, params.getBefore(), sort, params.getLimit());
         }
         return redditClient.getPosts(usernameOrSubreddit, sort, params.getLimit());
