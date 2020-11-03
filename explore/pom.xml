@@ -21,9 +21,10 @@
             <version>0.0.1-SNAPSHOT</version>
         </dependency>
 
+        <!-- Commons Library -->
         <dependency>
             <groupId>com.amoalla.redditube</groupId>
-            <artifactId>common-lib</artifactId>
+            <artifactId>commons</artifactId>
             <version>0.0.1-SNAPSHOT</version>
         </dependency>
 
