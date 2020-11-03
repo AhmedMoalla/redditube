@@ -1,4 +1,4 @@
-package com.amoalla.redditube.mediaposts.configuration;
+package com.amoalla.redditube.commons.configuration.security;
 
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
