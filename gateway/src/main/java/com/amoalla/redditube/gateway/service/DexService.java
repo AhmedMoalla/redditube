@@ -31,11 +31,11 @@ public class DexService implements InitializingBean {
     }
 
     @Override
-    public void afterPropertiesSet() throws Exception {
+    public void afterPropertiesSet() {
         dexStub = createBlockingStub();
     }
 
-    public void createNewPassword(RedditubeUser user, String rawPassword) throws UserAlreadyExistsException {
+    public void createNewPassword(RedditubeUser user, String rawPassword) {
         String hash = passwordEncoder.encode(rawPassword);
         ByteString hashBytes = ByteString.copyFrom(hash.getBytes());
         var password = Password.newBuilder()

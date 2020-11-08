@@ -20,7 +20,7 @@ public class UserService {
         this.dexService = dexService;
     }
 
-    public Mono<RedditubeUser> registerUser(RedditubeUser user, String rawPassword) throws UserAlreadyExistsException {
+    public Mono<RedditubeUser> registerUser(RedditubeUser user, String rawPassword) {
         Optional<RedditubeUser> foundUserOpt = userRepository.findByEmail(user.getEmail());
         if (foundUserOpt.isPresent()) {
             RedditubeUser foundUser = foundUserOpt.get();

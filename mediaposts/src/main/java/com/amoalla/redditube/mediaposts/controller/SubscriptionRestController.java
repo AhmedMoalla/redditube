@@ -4,18 +4,12 @@ import com.amoalla.redditube.client.model.MediaPost;
 import com.amoalla.redditube.mediaposts.entity.Subscribable;
 import com.amoalla.redditube.mediaposts.entity.Subscription;
 import com.amoalla.redditube.mediaposts.service.SubscriptionService;
-import org.springframework.security.core.Authentication;
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.*;
 import reactor.core.publisher.Flux;
 import reactor.core.publisher.Mono;
 
 /**
- * * Follow
- * - Get my followed user/subreddit's posts (Feed)  GET /feed
- * - Follow users/subreddits                        POST /feed/followed
- * - Get followed users/subreddits                  GET /feed/followed
- * - Stop following users/subreddits                DELETE /feed/followed
- * <p>
  * * Organize
  * - Star a post (Add in starred folder)
  * - Create a new folder ...
@@ -31,22 +25,22 @@ public class SubscriptionRestController {
     }
 
     @GetMapping("/feed")
-    public Flux<MediaPost> getFeed(Authentication authentication) {
-        return subscriptionService.getFeed("");
+    public Flux<MediaPost> getFeed(@AuthenticationPrincipal String userId) {
+        return subscriptionService.getFeed(userId);
     }
 
     @PostMapping
-    public Mono<Subscription> subscribe(Subscribable subscribable, Authentication authentication) {
-        return subscriptionService.subscribe(subscribable, "");
+    public Mono<Subscription> subscribe(Subscribable subscribable, @AuthenticationPrincipal String userId) {
+        return subscriptionService.subscribe(subscribable, userId);
     }
 
     @DeleteMapping
-    public Mono<Subscription> unsubscribe(Subscribable subscribable, Authentication authentication) {
-        return subscriptionService.unsubscribe(subscribable, "");
+    public Mono<Subscription> unsubscribe(Subscribable subscribable, @AuthenticationPrincipal String userId) {
+        return subscriptionService.unsubscribe(subscribable, userId);
     }
 
     @GetMapping
-    public Flux<Subscription> getSubscriptions(Authentication authentication) {
-        return subscriptionService.getSubscriptions("");
+    public Flux<Subscription> getSubscriptions(@AuthenticationPrincipal String userId) {
+        return subscriptionService.getSubscriptions(userId);
     }
 }

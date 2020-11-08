@@ -15,11 +15,15 @@ spring:
         #            args:
         #              name: fallback
         #              fallbackUri: forward:/fallback
-        - id: "Posts"
+        - id: "Feed"
           uri: "http://localhost:8082"
           predicates:
-            - Path=/posts/**
+            - Path=/feed
           filters:
-            - StripPrefix=1
+            - PrefixPath=/subscriptions
+        - id: "Subscriptions"
+          uri: "http://localhost:8082"
+          predicates:
+            - Path=/subscriptions
       default-filters:
         - RemoveRequestHeader=Cookie

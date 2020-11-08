@@ -1,12 +1,11 @@
 package com.amoalla.redditube.explore.controller;
 
-import com.amoalla.redditube.client.model.MediaPost;
 import com.amoalla.redditube.client.RedditClient;
+import com.amoalla.redditube.client.model.MediaPost;
 import com.amoalla.redditube.client.model.Sort;
 import com.amoalla.redditube.explore.controller.param.RequestParams;
 import com.amoalla.redditube.explore.util.CaseInsensitiveEnumEditor;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.security.core.Authentication;
 import org.springframework.util.StringUtils;
 import org.springframework.web.bind.WebDataBinder;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -28,8 +27,7 @@ public class ExploreRestController {
     @GetMapping("/{usernameOrSubreddit}")
     public Flux<MediaPost> getPosts(
             @PathVariable String usernameOrSubreddit,
-            RequestParams params,
-            Authentication authentication) {
+            RequestParams params) {
 
         log.info("Received GET /{} with params: {}", usernameOrSubreddit, params);
         if (!StringUtils.isEmpty(params.getAfter())) {

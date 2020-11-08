@@ -11,13 +11,13 @@ import javax.validation.constraints.NotNull;
 public class Subscription {
 
     @Id
-    private int id;
+    private Integer id;
 
     @NotNull
     @Column(name = "user_id")
     private String userId;
 
-    @ManyToOne
-    @JoinColumn(name = "subscribable_id")
+    @NotNull
+    @OneToOne
     private Subscribable subscribable;
 }

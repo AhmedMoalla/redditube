@@ -10,4 +10,12 @@
             <dropTable tableName="redditube_user"/>
         </rollback>
     </changeSet>
+
+    <changeSet id="2-MODEL-create-subscription-tables" author="amoalla">
+        <sqlFile path="./src/main/resources/sql-files/2-MODEL-create-subscription-tables.sql"/>
+        <rollback>
+            <dropTable tableName="subscribable"/>
+            <dropTable tableName="subscription"/>
+        </rollback>
+    </changeSet>
 </databaseChangeLog>

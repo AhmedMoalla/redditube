@@ -6,7 +6,7 @@ import javax.persistence.*;
 import javax.validation.constraints.NotNull;
 
 /**
- * An entity to be followed. Represents a User or a Subreddit
+ * An entity to be subscribed to. Represents a User or a Subreddit
  */
 @Data
 @Entity
