@@ -25,7 +25,7 @@ public class ExploreRestController {
         this.redditClient = redditClient;
     }
 
-    @GetMapping("/{usernameOrSubreddit}")
+    @GetMapping("/redditclient/{usernameOrSubreddit}")
     public Flux<MediaPost> getPosts(
             @PathVariable String usernameOrSubreddit,
             RequestParams params,
@@ -40,7 +40,7 @@ public class ExploreRestController {
         return redditClient.getPosts(usernameOrSubreddit, params.getLimit());
     }
 
-    @GetMapping("/{usernameOrSubreddit}/{sort}")
+    @GetMapping("/redditclient/{usernameOrSubreddit}/{sort}")
     public Flux<MediaPost> getPostsWithSorting(
             @PathVariable String usernameOrSubreddit,
             @PathVariable Sort sort,
