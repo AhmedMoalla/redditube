@@ -1,7 +1,7 @@
 package com.amoalla.redditube.explore.controller;
 
 import com.amoalla.redditube.client.RedditClient;
-import com.amoalla.redditube.client.model.MediaPost;
+import com.amoalla.redditube.client.model.MediaPostDto;
 import com.amoalla.redditube.client.model.Sort;
 import com.amoalla.redditube.explore.controller.param.RequestParams;
 import com.amoalla.redditube.explore.util.CaseInsensitiveEnumEditor;
@@ -25,7 +25,7 @@ public class ExploreRestController {
     }
 
     @GetMapping("/{usernameOrSubreddit}")
-    public Flux<MediaPost> getPosts(
+    public Flux<MediaPostDto> getPosts(
             @PathVariable String usernameOrSubreddit,
             RequestParams params) {
 
@@ -39,7 +39,7 @@ public class ExploreRestController {
     }
 
     @GetMapping("/{usernameOrSubreddit}/{sort}")
-    public Flux<MediaPost> getPostsWithSorting(
+    public Flux<MediaPostDto> getPostsWithSorting(
             @PathVariable String usernameOrSubreddit,
             @PathVariable Sort sort,
             RequestParams params) {

@@ -1,6 +1,6 @@
 package com.amoalla.redditube.client.impl;
 
-import com.amoalla.redditube.client.model.MediaPost;
+import com.amoalla.redditube.client.model.MediaPostDto;
 import com.amoalla.redditube.client.model.MediaPostListings;
 import com.amoalla.redditube.client.model.Sort;
 import lombok.Getter;
@@ -79,7 +79,7 @@ public class MediaPostRequester {
         return this;
     }
 
-    public Flux<MediaPost> sendRequest(String usernameOrSubreddit) {
+    public Flux<MediaPostDto> sendRequest(String usernameOrSubreddit) {
         return webClient
                 .get()
                 .uri(builder -> buildURI(builder, usernameOrSubreddit))

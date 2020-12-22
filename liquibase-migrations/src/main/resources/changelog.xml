@@ -8,6 +8,7 @@
         <sqlFile path="./src/main/resources/sql-files/1-MODEL-create-user-table.sql"/>
         <rollback>
             <dropTable tableName="redditube_user"/>
+            <sql>DROP TYPE SUBSCRIBABLE_TYPE</sql>
         </rollback>
     </changeSet>
 

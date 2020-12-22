@@ -3,7 +3,7 @@ package com.amoalla.redditube.gateway.service;
 import com.amoalla.redditube.gateway.configuration.properties.DexProperties;
 import com.amoalla.redditube.gateway.dto.dex.PasswordVerification;
 import com.amoalla.redditube.gateway.entity.RedditubeUser;
-import com.amoalla.redditube.gateway.exception.UserAlreadyExistsException;
+import com.amoalla.redditube.gateway.exception.UsernameAlreadyExistsException;
 import com.coreos.dex.api.DexApi;
 import com.coreos.dex.api.DexApi.CreatePasswordReq;
 import com.coreos.dex.api.DexApi.Password;
@@ -41,7 +41,7 @@ public class DexService implements InitializingBean {
         var password = Password.newBuilder()
                 .setEmail(user.getEmail())
                 .setUsername(user.getEmail())
-                .setUserId(user.getId())
+                .setUserId(user.getUsername())
                 .setHash(hashBytes)
                 .build();
         var createPassReq = CreatePasswordReq.newBuilder()
@@ -49,7 +49,7 @@ public class DexService implements InitializingBean {
                 .build();
         var createPassRes = dexStub.createPassword(createPassReq);
         if (createPassRes.getAlreadyExists()) {
-            throw new UserAlreadyExistsException(user.getEmail());
+            throw new UsernameAlreadyExistsException(user.getEmail());
         }
         log.info("Password created successfully on Dex for user: {}", user.getEmail());
     }

@@ -8,16 +8,16 @@ import javax.validation.constraints.NotNull;
 @Data
 @Entity
 @Table(name = "subscription")
+@IdClass(SubscriptionID.class)
 public class Subscription {
 
     @Id
-    private Integer id;
-
     @NotNull
-    @Column(name = "user_id")
-    private String userId;
+    @Column(name = "username")
+    private String username;
 
+    @Id
     @NotNull
-    @OneToOne
+    @ManyToOne
     private Subscribable subscribable;
 }

@@ -11,7 +11,7 @@ import java.util.Collections;
 import java.util.Map;
 
 /**
- * A custom AuthenticationConverter used to set the principal on the Authentication Object as the user id
+ * A custom AuthenticationConverter used to set the principal on the Authentication Object as the username
  */
 public class UserIdPrincipalJwtAuthenticationConverter implements Converter<Jwt, Mono<AbstractAuthenticationToken>> {
 
@@ -23,8 +23,8 @@ public class UserIdPrincipalJwtAuthenticationConverter implements Converter<Jwt,
 
     @Override
     public Mono<AbstractAuthenticationToken> convert(Jwt source) {
-        String userId = getUserIdPrincipal(source);
-        return Mono.just(new UserIdPrincipalJwtAuthenticationToken(source, userId));
+        String username = getUserIdPrincipal(source);
+        return Mono.just(new UserIdPrincipalJwtAuthenticationToken(source, username));
     }
 
     // This implementation will only work for Dex. Need to have a more Generic implementation

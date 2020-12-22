@@ -13,7 +13,7 @@ import java.util.stream.StreamSupport;
 
 public class MediaPostListings {
     @Getter
-    private final List<MediaPost> mediaPosts = new ArrayList<>();
+    private final List<MediaPostDto> mediaPosts = new ArrayList<>();
 
     @JacksonInject
     private ObjectMapper objectMapper;
@@ -28,7 +28,7 @@ public class MediaPostListings {
     }
 
     @SneakyThrows
-    public MediaPost toMediaPost(JsonNode node) {
-        return objectMapper.treeToValue(node, MediaPost.class);
+    public MediaPostDto toMediaPost(JsonNode node) {
+        return objectMapper.treeToValue(node, MediaPostDto.class);
     }
 }

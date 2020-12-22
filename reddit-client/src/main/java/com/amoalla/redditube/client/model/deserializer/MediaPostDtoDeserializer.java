@@ -1,7 +1,7 @@
 package com.amoalla.redditube.client.model.deserializer;
 
 import com.amoalla.redditube.client.impl.exception.MediaPostParsingException;
-import com.amoalla.redditube.client.model.MediaPost;
+import com.amoalla.redditube.client.model.MediaPostDto;
 import com.fasterxml.jackson.core.JsonParser;
 import com.fasterxml.jackson.databind.DeserializationContext;
 import com.fasterxml.jackson.databind.JsonDeserializer;
@@ -12,7 +12,7 @@ import java.time.Instant;
 import java.time.LocalDateTime;
 import java.time.ZoneId;
 
-public class MediaPostDeserializer extends JsonDeserializer<MediaPost> {
+public class MediaPostDtoDeserializer extends JsonDeserializer<MediaPostDto> {
 
     private static final String NAME_KEY = "name";
     private static final String MEDIA_URL_KEY = "url_overridden_by_dest";
@@ -26,14 +26,14 @@ public class MediaPostDeserializer extends JsonDeserializer<MediaPost> {
     private static final String CREATED_UTC = "created_utc";
 
     @Override
-    public MediaPost deserialize(JsonParser p, DeserializationContext ctxt) throws IOException {
+    public MediaPostDto deserialize(JsonParser p, DeserializationContext ctxt) throws IOException {
         JsonNode node = p.getCodec().readTree(p);
         return parseSingleMediaPost(node);
     }
 
-    private MediaPost parseSingleMediaPost(JsonNode json) {
+    private MediaPostDto parseSingleMediaPost(JsonNode json) {
         try {
-            return MediaPost.builder()
+            return MediaPostDto.builder()
                     .id(getText(json, NAME_KEY))
                     .mediaUrl(getText(json, MEDIA_URL_KEY))
                     .mediaThumbnailUrl(getText(json, THUMBNAIL_KEY))
