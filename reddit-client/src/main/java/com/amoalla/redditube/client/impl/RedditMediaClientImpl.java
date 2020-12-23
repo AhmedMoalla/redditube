@@ -10,7 +10,9 @@ import reactor.core.publisher.Flux;
  */
 public class RedditMediaClientImpl implements RedditClient {
 
-    private final MediaPostRequester requester;
+    private MediaPostRequester requester;
+
+    RedditMediaClientImpl() {}
 
     public RedditMediaClientImpl(MediaPostRequester requester) {
 

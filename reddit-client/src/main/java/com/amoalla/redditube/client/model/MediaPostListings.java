@@ -28,7 +28,7 @@ public class MediaPostListings {
     }
 
     @SneakyThrows
-    public MediaPostDto toMediaPost(JsonNode node) {
+    private MediaPostDto toMediaPost(JsonNode node) {
         return objectMapper.treeToValue(node, MediaPostDto.class);
     }
 }

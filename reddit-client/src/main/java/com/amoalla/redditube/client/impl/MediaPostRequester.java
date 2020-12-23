@@ -21,16 +21,18 @@ public class MediaPostRequester {
 
     public static final String USER_POSTS_URI = "/user/{username}/submitted";
     public static final String SUBREDDIT_POSTS_URI = "/r/{subreddit}/{sort}";
+    public static final String REQUESTED_TYPE = "links";
     private static final int MAX_LIMIT = 100;
-    private static final String REQUESTED_TYPE = "links";
 
-    private static final class QueryParams {
+    static final class QueryParams {
         public static final String LIMIT = "limit";
         public static final String AFTER = "after";
         public static final String BEFORE = "before";
         public static final String COUNT = "count";
         public static final String SORT = "sort";
         public static final String TYPE = "type";
+
+        private QueryParams() {}
     }
 
     @Getter

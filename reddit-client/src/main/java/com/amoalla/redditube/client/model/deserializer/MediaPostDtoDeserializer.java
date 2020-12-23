@@ -14,16 +14,16 @@ import java.time.ZoneId;
 
 public class MediaPostDtoDeserializer extends JsonDeserializer<MediaPostDto> {
 
-    private static final String NAME_KEY = "name";
-    private static final String MEDIA_URL_KEY = "url_overridden_by_dest";
-    private static final String THUMBNAIL_KEY = "thumbnail";
-    private static final String AUTHOR_KEY = "author";
-    private static final String SUBREDDIT_KEY = "subreddit";
-    private static final String TITLE_KEY = "title";
-    private static final String MEDIA_KEY = "media";
-    private static final String EMBED_KEY = "oembed";
-    private static final String HTML_KEY = "html";
-    private static final String CREATED_UTC = "created_utc";
+    static final String NAME_KEY = "name";
+    static final String MEDIA_URL_KEY = "url_overridden_by_dest";
+    static final String THUMBNAIL_KEY = "thumbnail";
+    static final String AUTHOR_KEY = "author";
+    static final String SUBREDDIT_KEY = "subreddit";
+    static final String TITLE_KEY = "title";
+    static final String MEDIA_KEY = "media";
+    static final String EMBED_KEY = "oembed";
+    static final String HTML_KEY = "html";
+    static final String CREATED_UTC = "created_utc";
 
     @Override
     public MediaPostDto deserialize(JsonParser p, DeserializationContext ctxt) throws IOException {

@@ -18,8 +18,6 @@ import java.util.concurrent.CountDownLatch;
 import java.util.concurrent.Executors;
 import java.util.concurrent.TimeUnit;
 
-import static com.amoalla.redditube.client.configuration.WebClientConfiguration.USER_AGENT_VALUE;
-
 /**
  * Service responsible for retrieving and refreshing an access token.
  * An access token is required in each request in the Authorization Header.
@@ -30,15 +28,11 @@ import static com.amoalla.redditube.client.configuration.WebClientConfiguration.
 @Service
 public class BearerTokenProvider implements InitializingBean {
 
-    private static final String REDDIT_BASE_URL = "https://www.reddit.com";
-    private static final String ACCESS_TOKEN_URI = "/api/v1/access_token";
-    private static final int REMAINING_LIFETIME_TO_REFRESH = 15;
-    private static final Duration EARLY_FETCH_DURATION = Duration.ofMinutes(REMAINING_LIFETIME_TO_REFRESH + 1);
-
-    private static final String GRANT_TYPE = "grant_type";
-    private static final String GRANT_TYPE_PASSWORD = "password";
-    private static final String USERNAME = "username";
-    private static final String PASSWORD = "password";
+    public static final String ACCESS_TOKEN_URI = "/api/v1/access_token";
+    public static final String GRANT_TYPE = "grant_type";
+    public static final String GRANT_TYPE_PASSWORD = "password";
+    public static final String USERNAME = "username";
+    public static final String PASSWORD = "password";
 
     private final WebClient webClient;
     private final RedditProperties properties;
@@ -52,8 +46,8 @@ public class BearerTokenProvider implements InitializingBean {
 
     public BearerTokenProvider(WebClient.Builder builder, RedditProperties properties) {
         this.webClient = builder
-                .baseUrl(REDDIT_BASE_URL)
-                .defaultHeader(HttpHeaders.USER_AGENT, USER_AGENT_VALUE)
+                .baseUrl(properties.getRedditBaseUrl())
+                .defaultHeader(HttpHeaders.USER_AGENT, properties.getUserAgent())
                 .build();
         this.properties = properties;
     }
@@ -108,15 +102,17 @@ public class BearerTokenProvider implements InitializingBean {
             }
         };
 
-        log.info("Starting refresh token task <Period: {} minutes>", REMAINING_LIFETIME_TO_REFRESH);
+        long checkRefreshPeriod = properties.getCheckRefreshPeriod();
+        log.info("Starting refresh token task <Period: {} minutes>", checkRefreshPeriod / 60);
         Executors.newSingleThreadScheduledExecutor()
-                .scheduleWithFixedDelay(refreshRunnable, REMAINING_LIFETIME_TO_REFRESH, REMAINING_LIFETIME_TO_REFRESH, TimeUnit.MINUTES);
+                .scheduleWithFixedDelay(refreshRunnable, checkRefreshPeriod, checkRefreshPeriod, TimeUnit.SECONDS);
     }
 
     private boolean isTokenNearlyExpired() {
         Instant now = Instant.now();
+        Duration earlyFetchDuration = Duration.ofSeconds(properties.getCheckRefreshPeriod() + 1);
         Duration lifetime = Duration.between(tokenCreationTime, now)
-                .plus(EARLY_FETCH_DURATION);
+                .plus(earlyFetchDuration);
         return lifetime.getSeconds() > timeToLiveInSeconds;
     }
 }
