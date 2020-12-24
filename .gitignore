@@ -32,4 +32,7 @@ build/
 
 ### VS Code ###
 .vscode/
+
+### Personal ###
 todo.txt
+sync.ps1

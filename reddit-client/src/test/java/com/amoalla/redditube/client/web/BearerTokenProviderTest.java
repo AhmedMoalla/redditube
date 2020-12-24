@@ -16,6 +16,7 @@ import org.springframework.http.HttpMethod;
 import org.springframework.http.MediaType;
 import org.springframework.util.MultiValueMap;
 import org.springframework.web.reactive.function.client.WebClient;
+import org.springframework.web.util.UriComponents;
 import org.springframework.web.util.UriComponentsBuilder;
 
 import java.io.IOException;
@@ -67,6 +68,10 @@ class BearerTokenProviderTest {
     }
 
     @Test
+    void dumbTest() {
+        assertTrue(true);
+    }
+    @Test
     void testProviderObtainsTokenOnPropertiesSet() throws JsonProcessingException, InterruptedException {
 
         MockResponse response = createAccessTokenMockResponse(TEST_ACCESS_TOKEN);
@@ -102,7 +107,11 @@ class BearerTokenProviderTest {
 
     private void assertSentRequestIsCorrect(RecordedRequest request) {
         assertEquals(HttpMethod.POST.name(), request.getMethod());
-        assertEquals(BearerTokenProvider.ACCESS_TOKEN_URI, request.getPath());
+        UriComponents components = UriComponentsBuilder.fromUriString(request.getPath())
+                .query(request.getBody().readUtf8())
+                .build();
+
+        assertEquals(BearerTokenProvider.ACCESS_TOKEN_URI, components.getPath());
 
         String credentials = String.format("%s:%s", TEST_CLIENT_ID, TEST_CLIENT_SECRET);
         String expectAuthHeader = "Basic " + Base64.getEncoder().encodeToString(credentials.getBytes());
@@ -111,9 +120,7 @@ class BearerTokenProviderTest {
         assertTrue(request.getHeader(HttpHeaders.CONTENT_TYPE).contains(MediaType.APPLICATION_FORM_URLENCODED_VALUE));
 
 
-        MultiValueMap<String, String> queryParams = UriComponentsBuilder.newInstance()
-                .query(request.getBody().readUtf8())
-                .build().getQueryParams();
+        MultiValueMap<String, String> queryParams = components.getQueryParams();
         assertEquals(BearerTokenProvider.GRANT_TYPE_PASSWORD, queryParams.getFirst(BearerTokenProvider.GRANT_TYPE));
         assertEquals(TEST_USERNAME, queryParams.getFirst(BearerTokenProvider.USERNAME));
         assertEquals(TEST_PASSWORD, queryParams.getFirst(BearerTokenProvider.PASSWORD));

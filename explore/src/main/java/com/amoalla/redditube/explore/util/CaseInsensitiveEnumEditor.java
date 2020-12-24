@@ -22,7 +22,7 @@ public class CaseInsensitiveEnumEditor extends PropertyEditorSupport {
     }
 
     @Override
-    public void setAsText(String text) throws IllegalArgumentException {
+    public void setAsText(String text) {
         if (text == null || text.isEmpty()) {
             setValue(null);
             return;
