@@ -13,7 +13,7 @@ import java.util.Map;
 /**
  * A custom AuthenticationConverter used to set the principal on the Authentication Object as the username
  */
-public class UserIdPrincipalJwtAuthenticationConverter implements Converter<Jwt, Mono<AbstractAuthenticationToken>> {
+public class DexUserIdPrincipalJwtAuthenticationConverter implements Converter<Jwt, Mono<AbstractAuthenticationToken>> {
 
     private static final String FEDERATED_CLAIMS = "federated_claims";
     private static final String USER_ID_CLAIM = "user_id";

@@ -12,7 +12,7 @@ import org.springframework.web.reactive.function.client.WebClient;
 
 import static org.assertj.core.api.AssertionsForInterfaceTypes.assertThat;
 
-class RedditClientConfigurationProvidesRedditClientTest {
+class RedditClientConfigurationTest {
 
     @Test
     void testRedditClientBeanPresentInContext() {

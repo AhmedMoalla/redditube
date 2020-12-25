@@ -36,17 +36,17 @@ class MediaPostRequesterTest {
     private static final String TEST_SUBREDDIT = "TEST_SUBREDDIT";
     private static final Sort TEST_SORT = Sort.NEW;
 
-    private static MockWebServer mockBackEnd;
+    private static MockWebServer mockWebServer;
 
     @BeforeAll
     static void setUpMockBackEnd() throws IOException {
-        mockBackEnd = new MockWebServer();
-        mockBackEnd.start();
+        mockWebServer = new MockWebServer();
+        mockWebServer.start();
     }
 
     @AfterAll
     static void tearDown() throws IOException {
-        mockBackEnd.shutdown();
+        mockWebServer.shutdown();
     }
 
     @Test
@@ -63,7 +63,7 @@ class MediaPostRequesterTest {
         MediaPostRequester mediaPostRequester = createRequesterForType(type);
         String usernameOrSubreddit = MediaPostRequester.Type.USER.equals(type) ? TEST_USERNAME : TEST_SUBREDDIT;
 
-        mockBackEnd.enqueue(createMediaPostListingsMockResponse());
+        mockWebServer.enqueue(createMediaPostListingsMockResponse());
         Flux<MediaPostDto> mediaPostDtoFlux = mediaPostRequester
                 .limit(TEST_LIMIT)
                 .after(TEST_AFTER)
@@ -76,7 +76,7 @@ class MediaPostRequesterTest {
         StepVerifier.create(mediaPostDtoFlux)
                 .verifyComplete();
 
-        assertSentRequestIsCorrect(mockBackEnd.takeRequest(), type);
+        assertSentRequestIsCorrect(mockWebServer.takeRequest(), type);
     }
 
     private void assertSentRequestIsCorrect(RecordedRequest request, MediaPostRequester.Type type) {
@@ -126,7 +126,7 @@ class MediaPostRequesterTest {
                 .build();
 
         WebClient webClient = WebClient.builder()
-                .baseUrl(String.format("http://localhost:%d", mockBackEnd.getPort()))
+                .baseUrl(String.format("http://localhost:%d", mockWebServer.getPort()))
                 .exchangeStrategies(exchangeStrategies)
                 .build();
         return new MediaPostRequester(type, webClient);

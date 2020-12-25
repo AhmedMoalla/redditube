@@ -1,0 +1,27 @@
+package com.amoalla.redditube.commons;
+
+import org.junit.jupiter.api.Test;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.test.autoconfigure.web.reactive.WebFluxTest;
+import org.springframework.test.context.ActiveProfiles;
+import org.springframework.test.context.ContextConfiguration;
+import org.springframework.test.web.reactive.server.WebTestClient;
+
+import static com.amoalla.redditube.commons.TestSecurityConfigurationRestController.TEST_SECURITY_PATH;
+
+@WebFluxTest
+@ActiveProfiles("oauth")
+@ContextConfiguration(classes = {CommonsConfiguration.class, TestSecurityConfigurationRestController.class})
+class CommonsConfigurationWithSecurityTest {
+
+    @Autowired
+    private WebTestClient webClient;
+
+    @Test
+    void testSecurityIsOnWhenProfileIsSet() {
+        webClient.get()
+                .uri(TEST_SECURITY_PATH)
+                .exchange()
+                .expectStatus().isUnauthorized();
+    }
+}

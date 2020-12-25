@@ -37,26 +37,26 @@ class BearerTokenProviderTest {
 
     private static final String TEST_ACCESS_TOKEN = "ACCESS_TOKEN";
 
-    private static MockWebServer mockBackEnd;
+    private static MockWebServer mockWebServer;
 
     private final ObjectMapper objectMapper = new ObjectMapper();
     private BearerTokenProvider bearerTokenProvider;
 
     @BeforeAll
     static void setUpMockBackEnd() throws IOException {
-        mockBackEnd = new MockWebServer();
-        mockBackEnd.start();
+        mockWebServer = new MockWebServer();
+        mockWebServer.start();
     }
 
     @AfterAll
     static void tearDown() throws IOException {
-        mockBackEnd.shutdown();
+        mockWebServer.shutdown();
     }
 
     @BeforeEach
     void setUp() {
         RedditProperties properties = new RedditProperties();
-        properties.setRedditBaseUrl(String.format("http://localhost:%d", mockBackEnd.getPort()));
+        properties.setRedditBaseUrl(String.format("http://localhost:%d", mockWebServer.getPort()));
         properties.setUsername(TEST_USERNAME);
         properties.setPassword(TEST_PASSWORD);
         properties.setClientId(TEST_CLIENT_ID);
@@ -68,37 +68,33 @@ class BearerTokenProviderTest {
     }
 
     @Test
-    void dumbTest() {
-        assertTrue(true);
-    }
-    @Test
     void testProviderObtainsTokenOnPropertiesSet() throws JsonProcessingException, InterruptedException {
 
         MockResponse response = createAccessTokenMockResponse(TEST_ACCESS_TOKEN);
-        mockBackEnd.enqueue(response);
+        mockWebServer.enqueue(response);
         bearerTokenProvider.afterPropertiesSet();
 
         assertEquals(TEST_ACCESS_TOKEN, bearerTokenProvider.getToken());
 
-        assertSentRequestIsCorrect(mockBackEnd.takeRequest());
+        assertSentRequestIsCorrect(mockWebServer.takeRequest());
     }
 
     @Test
     void testRefreshTokenTask() throws JsonProcessingException, InterruptedException {
 
         MockResponse response = createAccessTokenMockResponse(TEST_ACCESS_TOKEN);
-        mockBackEnd.enqueue(response);
+        mockWebServer.enqueue(response);
         bearerTokenProvider.afterPropertiesSet();
 
-        mockBackEnd.takeRequest();
-        assertEquals(1, mockBackEnd.getRequestCount());
+        mockWebServer.takeRequest();
+        assertEquals(1, mockWebServer.getRequestCount());
         assertEquals(TEST_ACCESS_TOKEN, bearerTokenProvider.getToken());
 
         String newAccessToken = TEST_ACCESS_TOKEN + "2";
         response = createAccessTokenMockResponse(newAccessToken);
-        mockBackEnd.enqueue(response);
-        mockBackEnd.takeRequest();
-        assertEquals(2, mockBackEnd.getRequestCount());
+        mockWebServer.enqueue(response);
+        mockWebServer.takeRequest();
+        assertEquals(2, mockWebServer.getRequestCount());
         await("New Access Token")
                 .atMost(1, TimeUnit.SECONDS)
                 .until(() -> newAccessToken.equals(bearerTokenProvider.getToken()));

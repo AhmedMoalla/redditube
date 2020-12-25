@@ -1,6 +1,6 @@
 package com.amoalla.redditube.commons.security.configuration;
 
-import com.amoalla.redditube.commons.security.converter.UserIdPrincipalJwtAuthenticationConverter;
+import com.amoalla.redditube.commons.security.converter.DexUserIdPrincipalJwtAuthenticationConverter;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.Profile;
@@ -17,7 +17,7 @@ public class OAuthResourceServerConfiguration {
     public SecurityWebFilterChain configureSecurity(ServerHttpSecurity http) {
         http.authorizeExchange().anyExchange().authenticated();
         http.oauth2ResourceServer().jwt()
-                .jwtAuthenticationConverter(new UserIdPrincipalJwtAuthenticationConverter());
+                .jwtAuthenticationConverter(new DexUserIdPrincipalJwtAuthenticationConverter());
         http.csrf().disable();
         return http.build();
     }

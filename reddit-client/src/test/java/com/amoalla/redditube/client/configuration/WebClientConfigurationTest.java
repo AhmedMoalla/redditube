@@ -32,30 +32,30 @@ class WebClientConfigurationTest {
     @RedditWebClient
     private WebClient webClient;
 
-    private static MockWebServer mockBackEnd;
+    private static MockWebServer mockWebServer;
 
     @BeforeAll
     static void setUpMockBackEnd() throws IOException {
-        mockBackEnd = new MockWebServer();
-        mockBackEnd.start();
+        mockWebServer = new MockWebServer();
+        mockWebServer.start();
     }
 
     @AfterAll
     static void tearDown() throws IOException {
-        mockBackEnd.shutdown();
+        mockWebServer.shutdown();
     }
 
     @Test
     void testWebClientAddsBearerTokenToAuthorizationHeader() throws InterruptedException {
 
-        mockBackEnd.enqueue(new MockResponse().setBody(TEST_RESPONSE));
+        mockWebServer.enqueue(new MockResponse().setBody(TEST_RESPONSE));
         webClient
                 .get()
                 .retrieve()
                 .bodyToMono(String.class)
                 .subscribe(str -> assertEquals(TEST_RESPONSE, str));
 
-        RecordedRequest recordedRequest = mockBackEnd.takeRequest();
+        RecordedRequest recordedRequest = mockWebServer.takeRequest();
         assertEquals(TEST_USER_AGENT, recordedRequest.getHeader(HttpHeaders.USER_AGENT));
         assertEquals("Bearer " + TEST_TOKEN, recordedRequest.getHeader(HttpHeaders.AUTHORIZATION));
     }
@@ -82,7 +82,7 @@ class WebClientConfigurationTest {
         @Bean
         RedditProperties redditProperties() {
             RedditProperties properties = new RedditProperties();
-            properties.setRedditOAuthBaseUrl(String.format("http://localhost:%d", mockBackEnd.getPort()));
+            properties.setRedditOAuthBaseUrl(String.format("http://localhost:%d", mockWebServer.getPort()));
             properties.setUserAgent(TEST_USER_AGENT);
             return properties;
         }
