@@ -1,6 +1,8 @@
 spring:
   profiles:
     active: oauth
+  application:
+    name: mediaposts
   datasource:
     username: postgres
     password: 98578652
