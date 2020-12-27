@@ -1,6 +1,6 @@
 package com.amoalla.redditube.commons.security.converter;
 
-import net.minidev.json.JSONObject;
+import com.nimbusds.jose.shaded.json.JSONObject;
 import org.springframework.core.convert.converter.Converter;
 import org.springframework.security.authentication.AbstractAuthenticationToken;
 import org.springframework.security.oauth2.jwt.Jwt;
@@ -34,7 +34,7 @@ public class DexUserIdPrincipalJwtAuthenticationConverter implements Converter<J
             throw new IllegalArgumentException(String.format(errorMessage, FEDERATED_CLAIMS));
         }
 
-        String userId = object.getAsString(USER_ID_CLAIM);
+        String userId = (String) object.get(USER_ID_CLAIM);
         if (userId == null) {
             throw new IllegalArgumentException(String.format(errorMessage, USER_ID_CLAIM));
         }

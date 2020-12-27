@@ -2,7 +2,7 @@ package com.amoalla.redditube.commons.security.converter;
 
 import com.amoalla.redditube.commons.CommonsConfiguration;
 import com.amoalla.redditube.commons.TestSecurityConfigurationRestController;
-import net.minidev.json.JSONObject;
+import com.nimbusds.jose.shaded.json.JSONObject;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.reactive.WebFluxTest;

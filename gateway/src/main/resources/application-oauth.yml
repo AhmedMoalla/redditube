@@ -13,7 +13,3 @@ spring:
             client-secret: ZXhhbXBsZS1hcHAtc2VjcmV0
             authorization-grant-type: authorization_code
             redirect-uri: "{baseUrl}/login/oauth2/code/dex"
-  cloud:
-    gateway:
-      default-filters:
-        - TokenRelay

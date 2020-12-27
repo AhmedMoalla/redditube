@@ -30,9 +30,9 @@ public class ExploreRestController {
             RequestParams params) {
 
         log.info("Received GET /{} with params: {}", usernameOrSubreddit, params);
-        if (!StringUtils.isEmpty(params.getAfter())) {
+        if (StringUtils.hasText(params.getAfter())) {
             return redditClient.getPostsAfter(usernameOrSubreddit, params.getAfter(), params.getLimit());
-        } else if (!StringUtils.isEmpty(params.getBefore())) {
+        } else if (StringUtils.hasText(params.getBefore())) {
             return redditClient.getPostsBefore(usernameOrSubreddit, params.getBefore(), params.getLimit());
         }
         return redditClient.getPosts(usernameOrSubreddit, params.getLimit());
@@ -45,9 +45,9 @@ public class ExploreRestController {
             RequestParams params) {
 
         log.info("Received GET /{} with sort: {} and params: {}", usernameOrSubreddit, sort, params);
-        if (!StringUtils.isEmpty(params.getAfter())) {
+        if (StringUtils.hasText(params.getAfter())) {
             return redditClient.getPostsAfter(usernameOrSubreddit, params.getAfter(), sort, params.getLimit());
-        } else if (!StringUtils.isEmpty(params.getBefore())) {
+        } else if (StringUtils.hasText(params.getBefore())) {
             return redditClient.getPostsBefore(usernameOrSubreddit, params.getBefore(), sort, params.getLimit());
         }
         return redditClient.getPosts(usernameOrSubreddit, sort, params.getLimit());

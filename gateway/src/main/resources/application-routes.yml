@@ -27,3 +27,4 @@ spring:
             - Path=/subscriptions
       default-filters:
         - RemoveRequestHeader=Cookie
+        - TokenRelay

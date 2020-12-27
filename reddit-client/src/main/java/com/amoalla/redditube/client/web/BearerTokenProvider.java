@@ -66,7 +66,7 @@ public class BearerTokenProvider implements InitializingBean {
     public String getToken() {
         // If called before setToken() in afterPropertiesSet()
         // Wait until it's available
-        if (StringUtils.isEmpty(token)) {
+        if (!StringUtils.hasText(token)) {
             log.warn("Token was needed before it was set. Waiting for token to be retrieved...");
             latch.await();
         }
