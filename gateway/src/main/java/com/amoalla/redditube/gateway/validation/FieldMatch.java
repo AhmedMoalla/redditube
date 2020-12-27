@@ -14,8 +14,7 @@ import static java.lang.annotation.RetentionPolicy.RUNTIME;
 @Retention(RUNTIME)
 @Constraint(validatedBy = FieldMatchValidator.class)
 @Documented
-public @interface FieldMatch
-{
+public @interface FieldMatch {
     String message() default "The fields must match";
     Class<?>[] groups() default {};
     Class<? extends Payload>[] payload() default {};

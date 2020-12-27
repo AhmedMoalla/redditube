@@ -1,6 +1,7 @@
 package com.amoalla.redditube.gateway.dto;
 
 import lombok.Data;
+import lombok.NoArgsConstructor;
 import org.springframework.data.util.ParsingUtils;
 import org.springframework.util.StringUtils;
 import org.springframework.validation.FieldError;
@@ -11,9 +12,10 @@ import java.util.List;
 import java.util.stream.Collectors;
 
 @Data
+@NoArgsConstructor
 public class RegistrationResponseDto {
-    private final RegisteredUserDto user;
-    private final List<String> errors = new ArrayList<>();
+    private RegisteredUserDto user;
+    private List<String> errors = new ArrayList<>();
 
     public RegistrationResponseDto(RegisteredUserDto user) {
         this.user = user;

@@ -32,7 +32,7 @@ public class DexService implements InitializingBean {
 
     @Override
     public void afterPropertiesSet() {
-        dexStub = createBlockingStub();
+        setDexStub(createBlockingStub());
     }
 
     public void createNewPassword(RedditubeUser user, String rawPassword) {
@@ -40,7 +40,7 @@ public class DexService implements InitializingBean {
         ByteString hashBytes = ByteString.copyFrom(hash.getBytes());
         var password = Password.newBuilder()
                 .setEmail(user.getEmail())
-                .setUsername(user.getEmail())
+                .setUsername(user.getUsername())
                 .setUserId(user.getUsername())
                 .setHash(hashBytes)
                 .build();
@@ -69,5 +69,9 @@ public class DexService implements InitializingBean {
                 .usePlaintext()
                 .build();
         return DexGrpc.newBlockingStub(channel);
+    }
+
+    public void setDexStub(DexBlockingStub dexStub) {
+        this.dexStub = dexStub;
     }
 }

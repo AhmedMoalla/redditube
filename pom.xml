@@ -46,6 +46,12 @@
         </dependency>
 
         <!-- Tests -->
+        <!-- Database Testing -->
+        <dependency>
+            <groupId>com.h2database</groupId>
+            <artifactId>h2</artifactId>
+            <scope>test</scope>
+        </dependency>
         <!-- Mock Server -->
         <dependency>
             <groupId>com.squareup.okhttp3</groupId>
