@@ -11,10 +11,6 @@ public class SubscriptionDto {
     private Subscribable subscribable;
     private String error;
 
-    public SubscriptionDto(Subscribable subscribable) {
-        this.subscribable = subscribable;
-    }
-
     public SubscriptionDto(String error) {
         this.error = error;
     }

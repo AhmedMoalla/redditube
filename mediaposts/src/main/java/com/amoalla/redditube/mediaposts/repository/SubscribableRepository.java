@@ -8,6 +8,6 @@ import org.springframework.stereotype.Repository;
 
 @Repository
 public interface SubscribableRepository extends CrudRepository<Subscribable, String> {
-    @Query("SELECT COUNT(s.subscriptions) FROM Subscribable s WHERE s.id = :subscribableId")
+    @Query("SELECT SIZE(s.subscriptions) FROM Subscribable s WHERE s.id = :subscribableId")
     long countSubscriptionsById(@Param("subscribableId") String subscribableId);
 }

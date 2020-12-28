@@ -3,7 +3,7 @@ package com.amoalla.redditube.mediaposts.service;
 import com.amoalla.redditube.client.model.MediaPostDto;
 import com.amoalla.redditube.mediaposts.entity.Subscribable;
 import com.amoalla.redditube.mediaposts.entity.Subscription;
-import com.amoalla.redditube.mediaposts.entity.SubscriptionID;
+import com.amoalla.redditube.mediaposts.entity.SubscriptionId;
 import com.amoalla.redditube.mediaposts.exception.AlreadySubscribedException;
 import com.amoalla.redditube.mediaposts.exception.AlreadyUnsubscribedException;
 import com.amoalla.redditube.mediaposts.repository.SubscribableRepository;
@@ -34,11 +34,8 @@ public class SubscriptionService {
     }
 
     public Mono<Subscription> subscribe(Subscribable subscribable, String username) {
-        Subscription newSubscription = new Subscription();
-        newSubscription.setUsername(username);
 
-        Optional<Subscription> subscription = subscriptionRepository.findById(new SubscriptionID(username, subscribable));
-        if (subscription.isPresent()) {
+        if (subscriptionRepository.existsById(new SubscriptionId(username, subscribable))) {
             throw new AlreadySubscribedException(username, subscribable.getId());
         }
 
@@ -46,13 +43,15 @@ public class SubscriptionService {
             subscribableRepository.save(subscribable);
         }
 
+        Subscription newSubscription = new Subscription();
+        newSubscription.setUsername(username);
         newSubscription.setSubscribable(subscribable);
 
         return Mono.just(subscriptionRepository.save(newSubscription));
     }
 
     public Mono<Subscription> unsubscribe(Subscribable subscribable, String username) {
-        Optional<Subscription> subscription = subscriptionRepository.findById(new SubscriptionID(username, subscribable));
+        Optional<Subscription> subscription = subscriptionRepository.findById(new SubscriptionId(username, subscribable));
         if (subscription.isEmpty()) {
             throw new AlreadyUnsubscribedException(username, subscribable.getId());
         }

@@ -4,7 +4,7 @@ import com.amoalla.redditube.client.RedditClient;
 import com.amoalla.redditube.client.model.MediaPostDto;
 import com.amoalla.redditube.client.model.Sort;
 import com.amoalla.redditube.explore.controller.param.RequestParams;
-import com.amoalla.redditube.explore.util.CaseInsensitiveEnumEditor;
+import com.amoalla.redditube.commons.util.CaseInsensitiveEnumEditor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.util.StringUtils;
 import org.springframework.web.bind.WebDataBinder;

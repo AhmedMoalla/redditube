@@ -12,15 +12,17 @@ import java.util.List;
 @Data
 @Entity
 @Table(name = "subscribable")
+@IdClass(SubscribableId.class)
 public class Subscribable {
 
     @Id
     private String id;
 
+    @Id
     @NotNull
     @Enumerated(EnumType.STRING)
     private SubscribableType type;
 
-    @OneToMany
+    @OneToMany(mappedBy = "subscribable")
     private List<Subscription> subscriptions;
 }

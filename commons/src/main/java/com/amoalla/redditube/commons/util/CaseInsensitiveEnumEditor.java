@@ -1,4 +1,4 @@
-package com.amoalla.redditube.explore.util;
+package com.amoalla.redditube.commons.util;
 
 import java.beans.PropertyEditorSupport;
 

@@ -4,16 +4,16 @@
         xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog
    http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-3.4.xsd">
 
-    <changeSet id="1-MODEL-create-user-table" author="amoalla">
-        <sqlFile path="./src/main/resources/sql-files/1-MODEL-create-user-table.sql"/>
+    <changeSet id="1-create-user-table" author="amoalla">
+        <sqlFile path="./src/main/resources/sql-files/1-create-user-table.sql"/>
         <rollback>
             <dropTable tableName="redditube_user"/>
             <sql>DROP TYPE SUBSCRIBABLE_TYPE</sql>
         </rollback>
     </changeSet>
 
-    <changeSet id="2-MODEL-create-subscription-tables" author="amoalla">
-        <sqlFile path="./src/main/resources/sql-files/2-MODEL-create-subscription-tables.sql"/>
+    <changeSet id="2-create-subscription-tables" author="amoalla">
+        <sqlFile path="./src/main/resources/sql-files/2-create-subscription-tables.sql"/>
         <rollback>
             <dropTable tableName="subscribable"/>
             <dropTable tableName="subscription"/>

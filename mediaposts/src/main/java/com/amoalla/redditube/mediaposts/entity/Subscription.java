@@ -8,7 +8,7 @@ import javax.validation.constraints.NotNull;
 @Data
 @Entity
 @Table(name = "subscription")
-@IdClass(SubscriptionID.class)
+@IdClass(SubscriptionId.class)
 public class Subscription {
 
     @Id
@@ -18,6 +18,8 @@ public class Subscription {
 
     @Id
     @NotNull
-    @ManyToOne
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "subscribable_id")
+    @JoinColumn(name = "subscribable_type")
     private Subscribable subscribable;
 }
