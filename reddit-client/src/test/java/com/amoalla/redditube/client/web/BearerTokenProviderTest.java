@@ -123,7 +123,7 @@ class BearerTokenProviderTest {
     }
 
     private MockResponse createAccessTokenMockResponse(String tokenValue) throws JsonProcessingException {
-        AccessToken accessToken = new AccessToken();
+        AccessTokenResponse accessToken = new AccessTokenResponse();
         accessToken.setAccessToken(tokenValue);
         accessToken.setExpiresInSeconds(2);
 

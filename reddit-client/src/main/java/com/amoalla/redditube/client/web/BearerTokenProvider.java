@@ -74,7 +74,7 @@ public class BearerTokenProvider implements InitializingBean {
         return token;
     }
 
-    private Mono<AccessToken> obtainAccessToken() {
+    private Mono<AccessTokenResponse> obtainAccessToken() {
         return webClient.post()
                 .uri(ACCESS_TOKEN_URI)
                 .headers(headers -> headers.setBasicAuth(properties.getClientId(), properties.getClientSecret()))
@@ -83,11 +83,11 @@ public class BearerTokenProvider implements InitializingBean {
                         .with(USERNAME, properties.getUsername())
                         .with(PASSWORD, properties.getPassword()))
                 .retrieve()
-                .bodyToMono(AccessToken.class)
-                .doOnNext(token -> log.info("Token obtained from Reddit API: {}", token));
+                .bodyToMono(AccessTokenResponse.class)
+                .doOnNext(tokenResponse -> log.info("Token obtained from Reddit API: {}", tokenResponse));
     }
 
-    private void setToken(AccessToken accessToken) {
+    private void setToken(AccessTokenResponse accessToken) {
         tokenCreationTime = Instant.now();
         token = accessToken.getAccessToken();
         timeToLiveInSeconds = accessToken.getExpiresInSeconds();
