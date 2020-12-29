@@ -1,4 +1,4 @@
-package com.amoalla.redditube.explore.controller.param;
+package com.amoalla.redditube.explorer.controller.param;
 
 import lombok.Data;
 

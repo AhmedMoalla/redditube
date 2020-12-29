@@ -1,9 +1,9 @@
-package com.amoalla.redditube.explore.controller;
+package com.amoalla.redditube.explorer.controller;
 
 import com.amoalla.redditube.client.RedditClient;
 import com.amoalla.redditube.client.model.MediaPostDto;
 import com.amoalla.redditube.client.model.Sort;
-import com.amoalla.redditube.explore.controller.param.RequestParams;
+import com.amoalla.redditube.explorer.controller.param.RequestParams;
 import com.amoalla.redditube.commons.util.CaseInsensitiveEnumEditor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.util.StringUtils;
@@ -16,11 +16,11 @@ import reactor.core.publisher.Flux;
 
 @Slf4j
 @RestController
-public class ExploreRestController {
+public class ExplorerRestController {
 
     private final RedditClient redditClient;
 
-    public ExploreRestController(RedditClient redditClient) {
+    public ExplorerRestController(RedditClient redditClient) {
         this.redditClient = redditClient;
     }
 

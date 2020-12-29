@@ -1,4 +1,4 @@
-package com.amoalla.redditube.explore.controller;
+package com.amoalla.redditube.explorer.controller;
 
 import com.amoalla.redditube.client.RedditClient;
 import com.amoalla.redditube.client.model.Sort;
@@ -15,8 +15,8 @@ import static org.mockito.Mockito.verify;
 
 @WebFluxTest
 @ActiveProfiles("default")
-@ContextConfiguration(classes = {CommonsConfiguration.class, ExploreRestController.class})
-class ExploreRestControllerTest {
+@ContextConfiguration(classes = {CommonsConfiguration.class, ExplorerRestController.class})
+class ExplorerRestControllerTest {
 
     private static final String GET_POSTS_PATH = "/{usernameOrSubreddit}";
     private static final String GET_POSTS_WITH_SORTING_PATH = GET_POSTS_PATH + "/{sort}";

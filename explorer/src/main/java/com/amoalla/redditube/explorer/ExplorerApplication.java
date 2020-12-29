@@ -1,12 +1,12 @@
-package com.amoalla.redditube.explore;
+package com.amoalla.redditube.explorer;
 
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 
 @SpringBootApplication
-public class ExploreApplication {
+public class ExplorerApplication {
 
     public static void main(String[] args) {
-        SpringApplication.run(ExploreApplication.class, args);
+        SpringApplication.run(ExplorerApplication.class, args);
     }
 }

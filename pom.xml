@@ -17,7 +17,7 @@
     <packaging>pom</packaging>
 
     <modules>
-        <module>explore</module>
+        <module>explorer</module>
         <module>reddit-client</module>
         <module>gateway</module>
         <module>mediaposts</module>
