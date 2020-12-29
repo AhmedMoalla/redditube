@@ -7,13 +7,9 @@ spring:
             issuer-uri: http://127.0.0.1:5556/dex
         registration:
           gateway-dex:
-            scope: openid, email, groups, profile, offline_access
+            scope: openid, email, groups, profile, offline_access, federated:id
             provider: dex
             client-id: gateway-dex
             client-secret: ZXhhbXBsZS1hcHAtc2VjcmV0
             authorization-grant-type: authorization_code
             redirect-uri: "{baseUrl}/login/oauth2/code/dex"
-  cloud:
-    gateway:
-      default-filters:
-        - TokenRelay

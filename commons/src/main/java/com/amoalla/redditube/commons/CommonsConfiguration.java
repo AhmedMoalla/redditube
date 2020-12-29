@@ -1,6 +1,7 @@
 package com.amoalla.redditube.commons;
 
 import lombok.extern.slf4j.Slf4j;
+import org.modelmapper.ModelMapper;
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.ComponentScan;
@@ -18,5 +19,10 @@ public class CommonsConfiguration {
     public CommandLineRunner initCommonsConfig(Environment env) {
         boolean securityEnabled = Arrays.asList(env.getActiveProfiles()).contains("oauth");
         return args -> log.info("Init Commons configuration. Security: {}", securityEnabled);
+    }
+
+    @Bean
+    ModelMapper provideModelMapper() {
+        return new ModelMapper();
     }
 }

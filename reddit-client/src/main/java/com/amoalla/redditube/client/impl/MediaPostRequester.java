@@ -1,6 +1,6 @@
 package com.amoalla.redditube.client.impl;
 
-import com.amoalla.redditube.client.model.MediaPost;
+import com.amoalla.redditube.client.model.MediaPostDto;
 import com.amoalla.redditube.client.model.MediaPostListings;
 import com.amoalla.redditube.client.model.Sort;
 import lombok.Getter;
@@ -21,16 +21,18 @@ public class MediaPostRequester {
 
     public static final String USER_POSTS_URI = "/user/{username}/submitted";
     public static final String SUBREDDIT_POSTS_URI = "/r/{subreddit}/{sort}";
+    public static final String REQUESTED_TYPE = "links";
     private static final int MAX_LIMIT = 100;
-    private static final String REQUESTED_TYPE = "links";
 
-    private static final class QueryParams {
+    static final class QueryParams {
         public static final String LIMIT = "limit";
         public static final String AFTER = "after";
         public static final String BEFORE = "before";
         public static final String COUNT = "count";
         public static final String SORT = "sort";
         public static final String TYPE = "type";
+
+        private QueryParams() {}
     }
 
     @Getter
@@ -79,7 +81,7 @@ public class MediaPostRequester {
         return this;
     }
 
-    public Flux<MediaPost> sendRequest(String usernameOrSubreddit) {
+    public Flux<MediaPostDto> sendRequest(String usernameOrSubreddit) {
         return webClient
                 .get()
                 .uri(builder -> buildURI(builder, usernameOrSubreddit))

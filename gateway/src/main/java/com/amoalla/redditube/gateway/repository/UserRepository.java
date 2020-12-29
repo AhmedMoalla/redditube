@@ -6,9 +6,8 @@ import org.springframework.stereotype.Repository;
 
 import javax.validation.constraints.Email;
 import javax.validation.constraints.NotEmpty;
-import java.util.Optional;
 
 @Repository
 public interface UserRepository extends CrudRepository<RedditubeUser, String> {
-    Optional<RedditubeUser> findByEmail(@Email @NotEmpty String email);
+    boolean existsByEmail(@Email @NotEmpty String email);
 }

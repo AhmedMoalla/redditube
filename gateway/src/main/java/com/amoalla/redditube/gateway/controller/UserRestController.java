@@ -4,7 +4,7 @@ import com.amoalla.redditube.gateway.dto.RegisteredUserDto;
 import com.amoalla.redditube.gateway.dto.RegistrationResponseDto;
 import com.amoalla.redditube.gateway.dto.UserDto;
 import com.amoalla.redditube.gateway.entity.RedditubeUser;
-import com.amoalla.redditube.gateway.exception.UserAlreadyExistsException;
+import com.amoalla.redditube.gateway.exception.UsernameAlreadyExistsException;
 import com.amoalla.redditube.gateway.service.UserService;
 import org.modelmapper.ModelMapper;
 import org.springframework.web.bind.annotation.*;
@@ -33,6 +33,6 @@ public class UserRestController {
                 .map(newUser -> modelMapper.map(newUser, RegisteredUserDto.class))
                 .map(RegistrationResponseDto::new)
                 .onErrorResume(WebExchangeBindException.class, e -> Mono.just(new RegistrationResponseDto(e.getAllErrors())))
-                .onErrorResume(UserAlreadyExistsException.class, e -> Mono.just(new RegistrationResponseDto(e.getMessage())));
+                .onErrorResume(UsernameAlreadyExistsException.class, e -> Mono.just(new RegistrationResponseDto(e.getMessage())));
     }
 }

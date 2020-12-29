@@ -1,7 +1,7 @@
 package com.amoalla.redditube.client.impl;
 
 import com.amoalla.redditube.client.RedditClient;
-import com.amoalla.redditube.client.model.MediaPost;
+import com.amoalla.redditube.client.model.MediaPostDto;
 import com.amoalla.redditube.client.model.Sort;
 import reactor.core.publisher.Flux;
 
@@ -10,7 +10,9 @@ import reactor.core.publisher.Flux;
  */
 public class RedditMediaClientImpl implements RedditClient {
 
-    private final MediaPostRequester requester;
+    private MediaPostRequester requester;
+
+    RedditMediaClientImpl() {}
 
     public RedditMediaClientImpl(MediaPostRequester requester) {
 
@@ -18,14 +20,14 @@ public class RedditMediaClientImpl implements RedditClient {
     }
 
     @Override
-    public Flux<MediaPost> getPosts(String usernameOrSubreddit, int limit) {
+    public Flux<MediaPostDto> getPosts(String usernameOrSubreddit, int limit) {
         return requester
                 .limit(limit)
                 .sendRequest(usernameOrSubreddit);
     }
 
     @Override
-    public Flux<MediaPost> getPosts(String usernameOrSubreddit, Sort sort, int limit) {
+    public Flux<MediaPostDto> getPosts(String usernameOrSubreddit, Sort sort, int limit) {
         return requester
                 .limit(limit)
                 .sort(sort)
@@ -33,7 +35,7 @@ public class RedditMediaClientImpl implements RedditClient {
     }
 
     @Override
-    public Flux<MediaPost> getPostsAfter(String usernameOrSubreddit, String postId, int limit) {
+    public Flux<MediaPostDto> getPostsAfter(String usernameOrSubreddit, String postId, int limit) {
         return requester
                 .after(postId)
                 .limit(limit)
@@ -41,7 +43,7 @@ public class RedditMediaClientImpl implements RedditClient {
     }
 
     @Override
-    public Flux<MediaPost> getPostsAfter(String usernameOrSubreddit, String postId, Sort sort, int limit) {
+    public Flux<MediaPostDto> getPostsAfter(String usernameOrSubreddit, String postId, Sort sort, int limit) {
         return requester
                 .after(postId)
                 .limit(limit)
@@ -50,7 +52,7 @@ public class RedditMediaClientImpl implements RedditClient {
     }
 
     @Override
-    public Flux<MediaPost> getPostsBefore(String usernameOrSubreddit, String postId, int limit) {
+    public Flux<MediaPostDto> getPostsBefore(String usernameOrSubreddit, String postId, int limit) {
         return requester
                 .before(postId)
                 .limit(limit)
@@ -58,7 +60,7 @@ public class RedditMediaClientImpl implements RedditClient {
     }
 
     @Override
-    public Flux<MediaPost> getPostsBefore(String usernameOrSubreddit, String postId, Sort sort, int limit) {
+    public Flux<MediaPostDto> getPostsBefore(String usernameOrSubreddit, String postId, Sort sort, int limit) {
         return requester
                 .before(postId)
                 .limit(limit)

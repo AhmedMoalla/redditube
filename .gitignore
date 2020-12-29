@@ -15,6 +15,7 @@ target/
 
 ### IntelliJ IDEA ###
 .idea
+.run/
 *.iws
 *.iml
 *.ipr
@@ -31,4 +32,7 @@ build/
 
 ### VS Code ###
 .vscode/
+
+### Personal ###
 todo.txt
+sync.ps1

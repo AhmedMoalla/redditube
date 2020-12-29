@@ -1,6 +1,12 @@
 spring:
   profiles:
     active: oauth
+  application:
+    name: mediaposts
+  datasource:
+    username: postgres
+    password: 98578652
+    url: jdbc:postgresql://localhost:5432/redditube
 
 server:
   port: 8082

@@ -15,15 +15,16 @@ import static org.springframework.http.HttpHeaders.USER_AGENT;
 @Configuration
 public class WebClientConfiguration {
 
-    public static final String USER_AGENT_VALUE = "Redditube (by Aerodash)";
-    public static final String OAUTH_BASE_URL = "https://oauth.reddit.com";
-
     private static final int BUFFER_SIZE = 16 * 1024 * 1024;
 
     private final BearerTokenProvider provider;
+    private final String userAgent;
+    private final String redditOAuthBaseUrl;
 
-    public WebClientConfiguration(BearerTokenProvider provider) {
+    public WebClientConfiguration(BearerTokenProvider provider, RedditProperties properties) {
         this.provider = provider;
+        userAgent = properties.getUserAgent();
+        redditOAuthBaseUrl = properties.getRedditOAuthBaseUrl();
     }
 
     @Bean
@@ -37,8 +38,8 @@ public class WebClientConfiguration {
 
         return builder
                 .exchangeStrategies(bufferSizeStrategy)
-                .defaultHeader(USER_AGENT, USER_AGENT_VALUE)
-                .baseUrl(OAUTH_BASE_URL)
+                .defaultHeader(USER_AGENT, userAgent)
+                .baseUrl(redditOAuthBaseUrl)
                 .filter(authHeader())
                 .build();
     }
@@ -46,7 +47,7 @@ public class WebClientConfiguration {
     private ExchangeFilterFunction authHeader() {
         return (request, next) -> next.exchange(
                 ClientRequest.from(request)
-                        .headers((headers) -> headers.setBearerAuth(provider.getToken()))
+                        .headers(headers -> headers.setBearerAuth(provider.getToken()))
                         .build());
     }
 
