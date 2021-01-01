@@ -21,7 +21,6 @@
         <module>reddit-client</module>
         <module>gateway</module>
         <module>mediaposts</module>
-        <module>liquibase-migrations</module>
         <module>commons</module>
     </modules>
 

@@ -1,0 +1,14 @@
+<databaseChangeLog
+        xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
+        xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+        xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog
+   http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-3.4.xsd">
+
+    <changeSet id="2-create-subscription-tables" author="amoalla">
+        <sqlFile path="./sql/1-create-subscription-tables.sql" relativeToChangelogFile="true"/>
+        <rollback>
+            <dropTable tableName="subscribable"/>
+            <dropTable tableName="subscription"/>
+        </rollback>
+    </changeSet>
+</databaseChangeLog>
