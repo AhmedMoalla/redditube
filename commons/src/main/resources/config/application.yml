@@ -1,6 +1,8 @@
 spring:
   main:
     banner-mode: off
+  liquibase:
+    change-log: classpath:liquibase/changelog.xml
 
 # Disable Spring Security default password logging
 logging:
