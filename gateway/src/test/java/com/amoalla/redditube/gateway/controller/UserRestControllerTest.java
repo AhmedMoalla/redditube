@@ -27,6 +27,7 @@ import static org.mockito.Mockito.when;
 @ContextConfiguration(classes = {CommonsConfiguration.class, UserRestController.class})
 class UserRestControllerTest {
 
+    private static final String TEST_USERNAME = "test_username";
     private static final String TEST_EMAIL = "test_user@mail.com";
     private static final String TEST_FIRSTNAME = "test_firstname";
     private static final String TEST_LASTNAME = "test_lastname";
@@ -40,6 +41,7 @@ class UserRestControllerTest {
     @BeforeEach
     void setUp() {
         RedditubeUser user = new RedditubeUser();
+        user.setUsername(TEST_USERNAME);
         user.setEmail(TEST_EMAIL);
         user.setFirstName(TEST_FIRSTNAME);
         user.setLastName(TEST_LASTNAME);
@@ -49,12 +51,14 @@ class UserRestControllerTest {
     @Test
     void testRegisterUser() {
         RegisteredUserDto registeredUserDto = new RegisteredUserDto();
+        registeredUserDto.setUsername(TEST_USERNAME);
         registeredUserDto.setEmail(TEST_EMAIL);
         registeredUserDto.setFirstName(TEST_FIRSTNAME);
         registeredUserDto.setLastName(TEST_LASTNAME);
         RegistrationResponseDto expectedRegistration = new RegistrationResponseDto(registeredUserDto);
 
         UserDto userDto = new UserDto();
+        userDto.setUsername(TEST_USERNAME);
         userDto.setEmail(TEST_EMAIL);
         userDto.setFirstName(TEST_FIRSTNAME);
         userDto.setLastName(TEST_LASTNAME);

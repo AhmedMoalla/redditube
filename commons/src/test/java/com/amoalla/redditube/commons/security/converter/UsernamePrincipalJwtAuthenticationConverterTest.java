@@ -2,7 +2,6 @@ package com.amoalla.redditube.commons.security.converter;
 
 import com.amoalla.redditube.commons.CommonsConfiguration;
 import com.amoalla.redditube.commons.TestSecurityConfigurationRestController;
-import com.nimbusds.jose.shaded.json.JSONObject;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.reactive.WebFluxTest;
@@ -21,7 +20,7 @@ import static org.mockito.Mockito.when;
 @WebFluxTest
 @ActiveProfiles("oauth")
 @ContextConfiguration(classes = {CommonsConfiguration.class, TestSecurityConfigurationRestController.class})
-class DexUserIdPrincipalJwtAuthenticationConverterTest {
+class UsernamePrincipalJwtAuthenticationConverterTest {
 
     private static final String TEST_USERNAME = "TEST_USERNAME";
 
@@ -32,12 +31,10 @@ class DexUserIdPrincipalJwtAuthenticationConverterTest {
     private ReactiveJwtDecoder jwtDecoder;
 
     @Test
-    void testSecurityPassThroughWhenCorrectJwtAndExtractPrincipalCorrectlyWithDexConverter() {
-        JSONObject json = new JSONObject();
-        json.put("user_id", TEST_USERNAME);
+    void testSecurityPassThroughWhenCorrectJwtAndExtractPrincipalCorrectlyWithConverter() {
         Jwt jwt = Jwt.withTokenValue("token")
                 .header("alg", "none")
-                .claim("federated_claims", json)
+                .claim(UsernamePrincipalJwtAuthenticationConverter.PREFERRED_USERNAME_CLAIM, TEST_USERNAME)
                 .build();
         when(jwtDecoder.decode(anyString())).thenReturn(Mono.just(jwt));
         webClient

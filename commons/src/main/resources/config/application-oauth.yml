@@ -3,4 +3,4 @@ spring:
     oauth2:
       resourceserver:
         jwt:
-          issuer-uri: http://127.0.0.1:5556/dex
+          issuer-uri: http://localhost:5555/auth/realms/redditube

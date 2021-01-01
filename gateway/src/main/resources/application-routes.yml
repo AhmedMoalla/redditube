@@ -3,10 +3,10 @@ spring:
     gateway:
       httpclient:
         connect-timeout: 5000
-        response-timeout: 5s
+        response-timeout: 999s # TODO Find a solution for reddit api delay
       routes:
         - id: "ExploreUsers"
-          uri: "http://localhost:8081"
+          uri: ${redditube.hosts.explorer}
           predicates:
             - Path=/u/**
           filters:
@@ -16,13 +16,13 @@ spring:
         #              name: fallback
         #              fallbackUri: forward:/fallback
         - id: "Feed"
-          uri: "http://localhost:8082"
+          uri: ${redditube.hosts.mediaposts}
           predicates:
             - Path=/feed
           filters:
             - PrefixPath=/subscriptions
         - id: "Subscriptions"
-          uri: "http://localhost:8082"
+          uri: ${redditube.hosts.mediaposts}
           predicates:
             - Path=/subscriptions
       default-filters:
