@@ -14,6 +14,7 @@ import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.http.HttpHeaders;
 import org.springframework.test.context.ActiveProfiles;
 import org.springframework.web.reactive.function.client.WebClient;
+import org.springframework.web.util.UriComponentsBuilder;
 
 import java.io.IOException;
 
@@ -71,7 +72,10 @@ class GatewayRoutesTest implements InitializingBean {
         }
         RecordedRequest recordedRequest = mockWebServer.takeRequest();
         mockWebServer.enqueue(new MockResponse());
-        assertEquals(forwardedPath, recordedRequest.getPath());
+        String extractedPath = UriComponentsBuilder.fromUri(recordedRequest.getRequestUrl().uri())
+            .build()
+            .getPath();
+        assertEquals(forwardedPath, extractedPath);
         assertEquals(forwardedHost, recordedRequest.getHeader(HttpHeaders.HOST));
     }
 }
