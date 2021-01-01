@@ -1,22 +1,41 @@
 version: "3.8"
 services:
-  dex:
-    build: ./dex
+  keycloak:
+    image: quay.io/keycloak/keycloak:12.0.1
     ports:
-      - "5556:5556"
+      - "5555:8080"
+      - "15555:9990"
+    environment:
+      KEYCLOAK_USER: admin
+      KEYCLOAK_PASSWORD: admin
+      KEYCLOAK_IMPORT: /tmp/realm.json
+      DB_VENDOR: postgres
+      DB_ADDR: postgres:5432
+      DB_DATABASE: keycloak
+      DB_USER: postgres
+      DB_PASSWORD: '98578652'
     volumes:
-      - ./dex/config:/opt/dex/config
-    depends_on:
-      - postgres
+      - ./keycloak/realm.json:/tmp/realm.json
   postgres:
-    image: "postgres:latest"
+    image: postgres:13.1
     ports:
       - "5432:5432"
     volumes:
-      - ~/dev/mount:/var/lib/postgresql/data
+      - ~/dev/mount/postgres_data:/var/lib/postgresql/data
       - ./postgres:/docker-entrypoint-initdb.d
     environment:
       POSTGRES_USER: postgres
       POSTGRES_PASSWORD: '98578652'
-      POSTGRES_MULTIPLE_DATABASES: dex,redditube
+      POSTGRES_MULTIPLE_DATABASES: keycloak,redditube
       PGDATA: /var/lib/postgresql/data/pgdata
+  rabbitmq:
+    image: rabbitmq:3.8.9-management-alpine
+    ports:
+      - "5672:5672"
+      - "15672:15672"
+    volumes:
+      - ~/dev/mount/rabbitmq_data:/var/lib/rabbitmq
+    hostname: rabbitmq-host
+    environment:
+      RABBITMQ_DEFAULT_USER: rabbitmq
+      RABBITMQ_DEFAULT_PASS: '98578652'

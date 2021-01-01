@@ -7,17 +7,20 @@ import com.amoalla.redditube.gateway.repository.UserRepository;
 import org.springframework.stereotype.Service;
 import reactor.core.publisher.Mono;
 
+import javax.transaction.Transactional;
+
 @Service
 public class UserService {
 
     private final UserRepository userRepository;
-    private final DexService dexService;
+    private final IdpService idpService;
 
-    public UserService(UserRepository userRepository, DexService dexService) {
+    public UserService(UserRepository userRepository, IdpService idpService) {
         this.userRepository = userRepository;
-        this.dexService = dexService;
+        this.idpService = idpService;
     }
 
+    @Transactional
     public Mono<RedditubeUser> registerUser(RedditubeUser user, String rawPassword) {
         if (userRepository.existsById(user.getUsername())) {
             throw new UsernameAlreadyExistsException(user.getUsername());
@@ -27,8 +30,7 @@ public class UserService {
             throw new EmailAlreadyExistsException(user.getEmail());
         }
 
-        RedditubeUser newUser = userRepository.save(user);
-        dexService.createNewPassword(newUser, rawPassword);
-        return Mono.just(newUser);
+        idpService.registerUser(user, rawPassword);
+        return Mono.just(userRepository.save(user));
     }
 }

@@ -26,6 +26,7 @@ class UserRepositoryTest {
         user.setEmail(TEST_EMAIL);
         user.setFirstName("firstname");
         user.setLastName("lastname");
+        user.setIdpId("id");
 
         entityManager.persist(user);
 

@@ -22,7 +22,8 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 @ActiveProfiles("routes")
 @SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.DEFINED_PORT, properties = {
         "spring.cloud.gateway.httpclient.proxy.host=localhost",
-        "spring.cloud.gateway.httpclient.proxy.port=12345"
+        "spring.cloud.gateway.httpclient.proxy.port=12345",
+        "server.port=12346"
 })
 class GatewayRoutesTest implements InitializingBean {
 

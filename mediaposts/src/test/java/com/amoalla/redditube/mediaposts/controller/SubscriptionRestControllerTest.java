@@ -60,11 +60,9 @@ class SubscriptionRestControllerTest {
         when(subscriptionService.unsubscribe(Mockito.any(), eq(TEST_USERNAME))).thenReturn(Mono.just(subscription));
         when(subscriptionService.getSubscriptions(eq(TEST_USERNAME))).thenReturn(Flux.just());
 
-        JSONObject json = new JSONObject();
-        json.put("user_id", TEST_USERNAME);
         testJwt = Jwt.withTokenValue("token")
                 .header("alg", "none")
-                .claim("federated_claims", json)
+                .claim("preferred_username", TEST_USERNAME)
                 .build();
         when(jwtDecoder.decode(anyString())).thenReturn(Mono.just(testJwt));
     }

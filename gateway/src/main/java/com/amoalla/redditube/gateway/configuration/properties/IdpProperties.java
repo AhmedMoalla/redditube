@@ -6,8 +6,11 @@ import org.springframework.boot.context.properties.ConfigurationProperties;
 
 @Getter
 @Setter
-@ConfigurationProperties("dex")
-public class DexProperties {
+@ConfigurationProperties("idp")
+public class IdpProperties {
     private String host;
     private int port;
+    private String realm;
+    private String clientId;
+    private String clientSecret;
 }

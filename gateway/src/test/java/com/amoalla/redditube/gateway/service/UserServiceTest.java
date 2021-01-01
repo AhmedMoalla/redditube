@@ -33,7 +33,7 @@ class UserServiceTest {
     private UserRepository userRepository;
 
     @MockBean
-    private DexService dexService;
+    private IdpService idpService;
 
     @Autowired
     private UserService userService;
@@ -56,7 +56,7 @@ class UserServiceTest {
     void testRegisterUser() {
         Mono<RedditubeUser> user = userService.registerUser(testUser, TEST_PASSWORD);
         verify(userRepository).save(testUser);
-        verify(dexService).createNewPassword(testUser, TEST_PASSWORD);
+        verify(idpService).registerUser(testUser, TEST_PASSWORD);
         StepVerifier.create(user)
                 .expectNext(testUser)
                 .expectComplete()

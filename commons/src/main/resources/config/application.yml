@@ -6,3 +6,8 @@ spring:
 logging:
   level:
     org.springframework.boot.autoconfigure.security.reactive.ReactiveUserDetailsServiceAutoConfiguration: off
+
+redditube:
+  hosts:
+    explorer: http://localhost:8081
+    mediaposts: http://localhost:8082

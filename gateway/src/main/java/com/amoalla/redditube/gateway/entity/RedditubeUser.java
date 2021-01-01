@@ -23,6 +23,8 @@ public class RedditubeUser {
     private String firstName;
     @NotEmpty
     private String lastName;
+    @NotEmpty
+    private String idpId;
 }
 
 

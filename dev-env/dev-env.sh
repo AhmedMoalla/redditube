@@ -1,7 +1,7 @@
 #!/bin/bash
 
 #Usage: .dev-env.sh (start|stop|destroy) [pg_data_mount]
-#  start  : Starts the local dev environment (Dex on port 5556 + Postgres on port 5432)
+#  start  : Starts the local dev environment (Keycloak(5555) + Postgres(5432) + RabbitMQ(5672))
 #    Arg: [pg_data_mount] postgres volume mount location (Default: ~/dev/mount)
 #  stop   : Stops the local dev environment without removing containers and data
 #  destroy: Remove the local dev environment including containers and volumes
@@ -11,7 +11,7 @@ SUB_COMMAND=$1
 SUB_COMMAND_ARG=$2
 
 if [ -z "$SUB_COMMAND_ARG" ]; then
-  export PG_DATA_MOUNT=~/dev/mount
+  export PG_DATA_MOUNT=~/dev/mount/postgres_data
 else
   export PG_DATA_MOUNT=$SUB_COMMAND_ARG
 fi
@@ -33,8 +33,8 @@ destroy)
   ;;
 *)
   echo "Usage: .dev-env.sh (start|stop|destroy) [pg_data_mount]
-    start  : Starts the local dev environment (Dex on port 5556 + Postgres on port 5432)
-      Arg: [pg_data_mount] postgres volume mount location (Default: ~/dev/mount)
+    start  : Starts the local dev environment (Keycloak(5555) + Postgres(5432) + RabbitMQ(5672))
+      Arg: [pg_data_mount] postgres volume mount location (Default: ~/dev/mount/postgres_data)
     stop   : Stops the local dev environment without removing containers and data
     destroy: Remove the local dev environment including containers and volumes
       Arg: [pg_data_mount] postgres volume mount location to destroy (Optional)"

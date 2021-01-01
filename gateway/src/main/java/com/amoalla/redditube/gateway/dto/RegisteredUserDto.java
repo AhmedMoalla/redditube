@@ -11,6 +11,8 @@ public class RegisteredUserDto {
     @NotEmpty
     private String email;
     @NotEmpty
+    private String username;
+    @NotEmpty
     private String firstName;
     @NotEmpty
     private String lastName;
