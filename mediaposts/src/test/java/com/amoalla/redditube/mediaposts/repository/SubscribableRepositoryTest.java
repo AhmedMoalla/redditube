@@ -10,7 +10,7 @@ import org.springframework.boot.test.autoconfigure.orm.jpa.TestEntityManager;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
-@DataJpaTest
+@DataJpaTest(properties = "spring.liquibase.enabled=false")
 class SubscribableRepositoryTest {
 
     @Autowired

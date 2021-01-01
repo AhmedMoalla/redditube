@@ -1,0 +1,15 @@
+spring:
+  application:
+    name: gateway
+  liquibase:
+    enabled: false
+
+server:
+  port: 8080
+
+idp:
+  host: localhost
+  port: 5555
+  realm: redditube
+  client-id: redditube-gateway
+  client-secret: b81f9fc5-aa34-4dfa-bb11-0488429057e0
