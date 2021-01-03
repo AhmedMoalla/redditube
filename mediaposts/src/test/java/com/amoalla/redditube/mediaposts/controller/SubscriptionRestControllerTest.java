@@ -32,6 +32,7 @@ import static org.mockito.Mockito.when;
 @ContextConfiguration(classes = {CommonsConfiguration.class, SubscriptionRestController.class})
 class SubscriptionRestControllerTest {
 
+    private static final String TEST_HANDLE = "TEST_HANDLE";
     private static final String TEST_USERNAME = "TEST_USERNAME";
 
     @Autowired
@@ -49,10 +50,9 @@ class SubscriptionRestControllerTest {
     void setUp() {
         when(subscriptionService.getFeed(TEST_USERNAME)).thenReturn(Flux.just());
 
-
         Subscribable subscribable = new Subscribable();
-        subscribable.setId("ID");
         subscribable.setType(SubscribableType.USER);
+        subscribable.setHandle(TEST_HANDLE);
         Subscription subscription = new Subscription();
         subscription.setUsername(TEST_USERNAME);
         subscription.setSubscribable(subscribable);
@@ -80,14 +80,14 @@ class SubscriptionRestControllerTest {
     @Test
     void testSubscribe() {
         SubscribableDto dto = new SubscribableDto();
-        dto.setId("ID");
+        dto.setHandle(TEST_HANDLE);
         dto.setType(SubscribableType.USER);
 
         Subscribable subscribable = new Subscribable();
-        subscribable.setId("ID");
+        subscribable.setHandle(TEST_HANDLE);
         subscribable.setType(SubscribableType.USER);
         SubscriptionDto expectedSubscriptionDto = new SubscriptionDto();
-        expectedSubscriptionDto.setSubscribable(subscribable);
+        expectedSubscriptionDto.setSubscribable(dto);
         webClient.post()
                 .uri("/subscriptions")
                 .body(BodyInserters.fromValue(dto))
@@ -101,17 +101,17 @@ class SubscriptionRestControllerTest {
     @Test
     void testUnsubscribe() {
         SubscribableDto dto = new SubscribableDto();
-        dto.setId("ID");
+        dto.setHandle(TEST_HANDLE);
         dto.setType(SubscribableType.USER);
 
         Subscribable subscribable = new Subscribable();
-        subscribable.setId("ID");
+        subscribable.setHandle(TEST_HANDLE);
         subscribable.setType(SubscribableType.USER);
         SubscriptionDto expectedSubscriptionDto = new SubscriptionDto();
-        expectedSubscriptionDto.setSubscribable(subscribable);
+        expectedSubscriptionDto.setSubscribable(dto);
         webClient.delete()
                 .uri(builder -> builder.path("/subscriptions")
-                        .queryParam("id", "ID")
+                        .queryParam("handle", TEST_HANDLE)
                         .queryParam("type", "user")
                         .build())
                 .headers(headers -> headers.setBearerAuth(testJwt.getTokenValue()))

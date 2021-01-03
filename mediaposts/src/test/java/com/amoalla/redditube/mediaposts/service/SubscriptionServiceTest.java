@@ -48,7 +48,7 @@ class SubscriptionServiceTest {
     void setUp() {
 
         testSubscribable = new Subscribable();
-        testSubscribable.setId("ID");
+        testSubscribable.setHandle("HANDLE");
         testSubscribable.setType(SubscribableType.USER);
 
         testSubscription = new Subscription();

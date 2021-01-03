@@ -8,6 +8,7 @@ import com.amoalla.redditube.mediaposts.entity.Subscribable;
 import com.amoalla.redditube.mediaposts.entity.SubscribableType;
 import com.amoalla.redditube.mediaposts.exception.AlreadySubscribedException;
 import com.amoalla.redditube.mediaposts.service.SubscriptionService;
+import lombok.extern.slf4j.Slf4j;
 import org.modelmapper.ModelMapper;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.WebDataBinder;
@@ -17,6 +18,7 @@ import reactor.core.publisher.Mono;
 
 import javax.validation.Valid;
 
+@Slf4j
 @RestController
 @RequestMapping("/subscriptions")
 public class SubscriptionRestController {
@@ -31,6 +33,8 @@ public class SubscriptionRestController {
 
     @GetMapping("/feed")
     public Flux<MediaPostDto> getFeed(@AuthenticationPrincipal String username) {
+
+        log.info("Received GET /subscriptions/feed with username: {}", username);
         return subscriptionService.getFeed(username);
     }
 
@@ -38,18 +42,21 @@ public class SubscriptionRestController {
     public Mono<SubscriptionDto> subscribe(@Valid @RequestBody Mono<SubscribableDto> subscribableDto,
                                            @AuthenticationPrincipal String username) {
 
-        return subscribableDto.map(dto -> modelMapper.map(dto, Subscribable.class))
+        return subscribableDto
+                .doOnNext(dto -> log.info("Received POST /subscriptions with subscribable: {} and username: {}", dto, username))
+                .map(dto -> modelMapper.map(dto, Subscribable.class))
                 .flatMap(subscribable -> subscriptionService.subscribe(subscribable, username))
                 .map(newSubscription -> modelMapper.map(newSubscription, SubscriptionDto.class))
-                .onErrorResume(AlreadySubscribedException.class, cause -> Mono.just(new SubscriptionDto(cause.getMessage())))
-                .log();
+                .onErrorResume(AlreadySubscribedException.class, cause -> Mono.just(new SubscriptionDto(cause.getMessage())));
     }
 
     @DeleteMapping
     public Mono<SubscriptionDto> unsubscribe(@Valid Mono<SubscribableDto> subscribableDto,
                                              @AuthenticationPrincipal String username) {
 
-        return subscribableDto.map(dto -> modelMapper.map(dto, Subscribable.class))
+        return subscribableDto
+                .doOnNext(dto -> log.info("Received DELETE /subscriptions with subscribable: {} and username: {}", dto, username))
+                .map(dto -> modelMapper.map(dto, Subscribable.class))
                 .flatMap(subscribable -> subscriptionService.unsubscribe(subscribable, username))
                 .map(newSubscription -> modelMapper.map(newSubscription, SubscriptionDto.class));
     }
@@ -57,6 +64,7 @@ public class SubscriptionRestController {
     @GetMapping
     public Flux<SubscribableDto> getSubscriptions(@AuthenticationPrincipal String username) {
 
+        log.info("Received GET /subscriptions with username: {}", username);
         return subscriptionService.getSubscriptions(username)
                 .map(subscribable -> modelMapper.map(subscribable, SubscribableDto.class));
     }

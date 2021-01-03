@@ -8,18 +8,16 @@ import javax.validation.constraints.NotNull;
 @Data
 @Entity
 @Table(name = "subscription")
-@IdClass(SubscriptionId.class)
 public class Subscription {
 
     @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    private Integer id;
+
     @NotNull
-    @Column(name = "username")
     private String username;
 
-    @Id
     @NotNull
     @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "subscribable_id")
-    @JoinColumn(name = "subscribable_type")
     private Subscribable subscribable;
 }

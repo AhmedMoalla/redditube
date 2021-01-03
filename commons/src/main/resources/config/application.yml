@@ -3,6 +3,9 @@ spring:
     banner-mode: off
   liquibase:
     change-log: classpath:liquibase/changelog.xml
+  jackson:
+    mapper:
+      ACCEPT_CASE_INSENSITIVE_ENUMS: true
 
 # Disable Spring Security default password logging
 logging:

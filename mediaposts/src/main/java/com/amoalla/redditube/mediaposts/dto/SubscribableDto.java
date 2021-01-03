@@ -9,7 +9,7 @@ import javax.validation.constraints.NotNull;
 public class SubscribableDto {
 
     @NotNull
-    private String id;
+    private String handle;
     @NotNull
     private SubscribableType type;
 }

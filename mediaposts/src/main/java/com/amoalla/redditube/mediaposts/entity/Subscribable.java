@@ -12,13 +12,15 @@ import java.util.List;
 @Data
 @Entity
 @Table(name = "subscribable")
-@IdClass(SubscribableId.class)
 public class Subscribable {
 
     @Id
-    private String id;
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    private Integer id;
 
-    @Id
+    @NotNull
+    private String handle;
+
     @NotNull
     @Enumerated(EnumType.STRING)
     private SubscribableType type;
