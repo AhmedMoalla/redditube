@@ -72,10 +72,8 @@ class GatewayRoutesTest implements InitializingBean {
         }
         RecordedRequest recordedRequest = mockWebServer.takeRequest();
         mockWebServer.enqueue(new MockResponse());
-        String extractedPath = UriComponentsBuilder.fromUri(recordedRequest.getRequestUrl().uri())
-            .build()
-            .getPath();
-        assertEquals(forwardedPath, extractedPath);
+        String extractedPath = String.join("/", recordedRequest.getRequestUrl().pathSegments());
+        assertEquals(forwardedPath, "/" + extractedPath);
         assertEquals(forwardedHost, recordedRequest.getHeader(HttpHeaders.HOST));
     }
 }
