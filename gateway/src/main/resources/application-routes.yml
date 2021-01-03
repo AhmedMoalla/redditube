@@ -16,13 +16,13 @@ spring:
         #              name: fallback
         #              fallbackUri: forward:/fallback
         - id: "Feed"
-          uri: ${redditube.hosts.mediaposts}
+          uri: ${redditube.hosts.media-posts}
           predicates:
             - Path=/feed
           filters:
             - PrefixPath=/subscriptions
         - id: "Subscriptions"
-          uri: ${redditube.hosts.mediaposts}
+          uri: ${redditube.hosts.media-posts}
           predicates:
             - Path=/subscriptions
       default-filters:

@@ -9,5 +9,5 @@ import org.springframework.boot.context.properties.ConfigurationProperties;
 @ConfigurationProperties("redditube.hosts")
 public class ServiceHostsProperties {
     private String explorer;
-    private String mediaposts;
+    private String mediaPosts;
 }

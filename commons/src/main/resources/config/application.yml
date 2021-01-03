@@ -15,4 +15,4 @@ logging:
 redditube:
   hosts:
     explorer: http://localhost:8081
-    mediaposts: http://localhost:8082
+    media-posts: http://localhost:8082
