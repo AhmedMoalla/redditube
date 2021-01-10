@@ -14,6 +14,8 @@ reddit:
   password: 98578652
   type: user
 
+grpc.port: ${redditube.services.explorer-users.grpc-port}
+
 #logging.level:
 #  org.springframework.cloud.gateway: TRACE
 #  org.springframework.security: TRACE

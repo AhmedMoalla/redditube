@@ -1,7 +1,7 @@
 package com.amoalla.redditube.client.model.deserializer;
 
 import com.amoalla.redditube.client.impl.exception.MediaPostParsingException;
-import com.amoalla.redditube.client.model.MediaPostDto;
+import com.amoalla.redditube.api.dto.MediaPostDto;
 import com.fasterxml.jackson.core.JsonParser;
 import com.fasterxml.jackson.databind.DeserializationContext;
 import com.fasterxml.jackson.databind.JsonDeserializer;

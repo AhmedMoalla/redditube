@@ -1,7 +1,7 @@
 package com.amoalla.redditube.client.impl;
 
-import com.amoalla.redditube.client.model.MediaPostDto;
-import com.amoalla.redditube.client.model.Sort;
+import com.amoalla.redditube.api.dto.MediaPostDto;
+import com.amoalla.redditube.api.dto.Sort;
 import com.fasterxml.jackson.databind.InjectableValues;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import okhttp3.mockwebserver.MockResponse;

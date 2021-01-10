@@ -1,10 +1,11 @@
 package com.amoalla.redditube.client.impl;
 
-import com.amoalla.redditube.client.model.MediaPostDto;
+import com.amoalla.redditube.api.dto.MediaPostDto;
 import com.amoalla.redditube.client.model.MediaPostListings;
-import com.amoalla.redditube.client.model.Sort;
+import com.amoalla.redditube.api.dto.Sort;
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.web.reactive.function.client.WebClient;
 import org.springframework.web.util.UriBuilder;
 import reactor.core.publisher.Flux;
@@ -16,13 +17,14 @@ import static com.amoalla.redditube.client.RedditClient.DEFAULT_LIMIT;
 /**
  * Wrapper for WebClient to have a nice fluent API when sending requests
  */
+@Slf4j
 @RequiredArgsConstructor
 public class MediaPostRequester {
 
     public static final String USER_POSTS_URI = "/user/{username}/submitted";
     public static final String SUBREDDIT_POSTS_URI = "/r/{subreddit}/{sort}";
     public static final String REQUESTED_TYPE = "links";
-    private static final int MAX_LIMIT = 100;
+    public static final int MAX_LIMIT = 100;
 
     static final class QueryParams {
         public static final String LIMIT = "limit";
@@ -84,10 +86,15 @@ public class MediaPostRequester {
     public Flux<MediaPostDto> sendRequest(String usernameOrSubreddit) {
         return webClient
                 .get()
-                .uri(builder -> buildURI(builder, usernameOrSubreddit))
+                .uri(builder -> {
+                    URI uri = buildURI(builder, usernameOrSubreddit);
+                    log.debug("Sending GET to {}", uri);
+                    return uri;
+                })
                 .retrieve()
                 .bodyToMono(MediaPostListings.class)
-                .flatMapIterable(MediaPostListings::getMediaPosts);
+                .flatMapIterable(MediaPostListings::getMediaPosts)
+                .doOnComplete(this::clearRequester);
     }
 
     private URI buildURI(UriBuilder builder, String usernameOrSubreddit) {
@@ -107,4 +114,11 @@ public class MediaPostRequester {
         return builder.build(usernameOrSubreddit);
     }
 
+    private void clearRequester() {
+        limit = 10;
+        after = "";
+        before = "";
+        count = "";
+        sort = Sort.NEW;
+    }
 }

@@ -10,6 +10,7 @@ import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.web.reactive.server.WebTestClient;
 
 import static com.amoalla.redditube.commons.TestSecurityConfigurationRestController.TEST_SECURITY_PATH;
+import static com.amoalla.redditube.commons.TestSecurityConfigurationRestController.TEST_SHOULD_BE_UNSECURE;
 
 @WebFluxTest
 @ActiveProfiles("oauth")
@@ -28,5 +29,13 @@ class CommonsConfigurationWithSecurityTest {
                 .uri(TEST_SECURITY_PATH)
                 .exchange()
                 .expectStatus().isUnauthorized();
+    }
+
+    @Test
+    void testSecurityIsOffWithPermitAllAnnotation() {
+        webClient.get()
+                .uri(TEST_SHOULD_BE_UNSECURE)
+                .exchange()
+                .expectStatus().isOk();
     }
 }

@@ -1,8 +1,11 @@
 package com.amoalla.redditube.commons;
 
 import com.amoalla.redditube.commons.configuration.ServiceHostsProperties;
+import com.amoalla.redditube.commons.modelmapper.LocalDateTimeToProtoTimestampConverter;
+import com.amoalla.redditube.commons.modelmapper.ProtoTimestampToLocalDateTimeConverter;
 import lombok.extern.slf4j.Slf4j;
 import org.modelmapper.ModelMapper;
+import org.modelmapper.protobuf.ProtobufModule;
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.boot.context.properties.EnableConfigurationProperties;
 import org.springframework.context.annotation.Bean;
@@ -25,7 +28,11 @@ public class CommonsConfiguration {
     }
 
     @Bean
-    ModelMapper provideModelMapper() {
-        return new ModelMapper();
+    public ModelMapper provideModelMapper() {
+        ModelMapper modelMapper = new ModelMapper();
+        modelMapper.registerModule(new ProtobufModule());
+        modelMapper.addConverter(new LocalDateTimeToProtoTimestampConverter());
+        modelMapper.addConverter(new ProtoTimestampToLocalDateTimeConverter());
+        return modelMapper;
     }
 }

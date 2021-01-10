@@ -6,7 +6,7 @@ spring:
         response-timeout: 999s # TODO Find a solution for reddit api delay
       routes:
         - id: "ExploreUsers"
-          uri: ${redditube.hosts.explorer}
+          uri: http://${redditube.services.explorer-users.host}:${redditube.services.explorer-users.port}
           predicates:
             - Path=/u/**
           filters:
@@ -16,13 +16,13 @@ spring:
         #              name: fallback
         #              fallbackUri: forward:/fallback
         - id: "Feed"
-          uri: ${redditube.hosts.media-posts}
+          uri: http://${redditube.services.media-posts.host}:${redditube.services.media-posts.port}
           predicates:
             - Path=/feed
           filters:
             - PrefixPath=/subscriptions
         - id: "Subscriptions"
-          uri: ${redditube.hosts.media-posts}
+          uri: http://${redditube.services.media-posts.host}:${redditube.services.media-posts.port}
           predicates:
             - Path=/subscriptions
       default-filters:

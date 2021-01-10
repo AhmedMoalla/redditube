@@ -12,6 +12,13 @@
     <artifactId>reddit-client</artifactId>
 
     <dependencies>
+        <!-- Redditube API -->
+        <dependency>
+            <groupId>com.amoalla.redditube</groupId>
+            <artifactId>api</artifactId>
+            <version>0.0.1-SNAPSHOT</version>
+        </dependency>
+
         <!-- Web -->
         <dependency>
             <groupId>org.springframework.boot</groupId>

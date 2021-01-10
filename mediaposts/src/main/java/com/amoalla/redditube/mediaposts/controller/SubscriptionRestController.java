@@ -1,6 +1,6 @@
 package com.amoalla.redditube.mediaposts.controller;
 
-import com.amoalla.redditube.client.model.MediaPostDto;
+import com.amoalla.redditube.api.dto.MediaPostDto;
 import com.amoalla.redditube.commons.util.CaseInsensitiveEnumEditor;
 import com.amoalla.redditube.mediaposts.dto.SubscribableDto;
 import com.amoalla.redditube.mediaposts.dto.SubscriptionDto;

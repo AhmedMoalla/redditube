@@ -1,5 +1,6 @@
 package com.amoalla.redditube.client.model;
 
+import com.amoalla.redditube.api.dto.MediaPostDto;
 import com.fasterxml.jackson.annotation.JacksonInject;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.databind.JsonNode;

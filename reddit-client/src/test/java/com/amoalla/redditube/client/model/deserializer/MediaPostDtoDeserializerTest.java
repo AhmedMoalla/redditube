@@ -1,9 +1,9 @@
 package com.amoalla.redditube.client.model.deserializer;
 
-import com.amoalla.redditube.client.model.MediaPostDto;
+import com.amoalla.redditube.api.dto.MediaPostDto;
+import com.amoalla.redditube.client.configuration.RedditClientConfiguration;
 import com.amoalla.redditube.client.model.MediaPostListings;
 import com.fasterxml.jackson.core.JsonProcessingException;
-import com.fasterxml.jackson.databind.InjectableValues;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
@@ -26,18 +26,17 @@ class MediaPostDtoDeserializerTest {
     private static final String TEST_HTML = "TEST_HTML";
     private static final String TEST_MEDIA = String.format("{\"%s\":  {\"%s\":  \"%s\"}}", EMBED_KEY, HTML_KEY, TEST_HTML);
     private static final long TEST_CREATED_UTC = Instant.now().toEpochMilli();
-    private static final ObjectMapper objectMapper = new ObjectMapper();
+    private static ObjectMapper objectMapper;
 
     @BeforeAll
     static void setUpObjectMapper() {
-        InjectableValues.Std injectables = new InjectableValues.Std();
-        injectables.addValue(ObjectMapper.class, objectMapper);
-        objectMapper.setInjectableValues(injectables);
+        RedditClientConfiguration config = new RedditClientConfiguration();
+        objectMapper = config.configureObjectMapper(new ObjectMapper());
     }
 
     @Test
     void testDeserializationWorks() throws JsonProcessingException {
-        String json = creatTestJson();
+        String json = createTestJson();
         MediaPostListings listings = objectMapper.readValue(json, MediaPostListings.class);
         assertNotNull(listings);
         assertEquals(1, listings.getMediaPosts().size());
@@ -55,7 +54,7 @@ class MediaPostDtoDeserializerTest {
         assertEquals(expectedCreationDate, mediaPostDto.getCreationDateTime());
     }
 
-    private String creatTestJson() {
+    private String createTestJson() {
         return String.format("{\"data\":  { \"children\": [{\"data\": {\"%s\":  \"%s\", \"%s\": \"%s\", \"%s\": \"%s\", \"%s\": \"%s\", \"%s\": \"%s\", \"%s\": \"%s\", \"%s\": %s, \"%s\": %s}}] }}",
                 NAME_KEY, TEST_NAME,
                 MEDIA_URL_KEY, TEST_MEDIA_URL,

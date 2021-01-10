@@ -25,6 +25,10 @@ public class Subscribable {
     @Enumerated(EnumType.STRING)
     private SubscribableType type;
 
+    private String lastFetchedPostId;
+
+    private Integer lastFetchedPostCount;
+
     @OneToMany(mappedBy = "subscribable")
     private List<Subscription> subscriptions;
 }
