@@ -1,12 +1,11 @@
 package com.amoalla.redditube.explorer.controller;
 
-import com.amoalla.redditube.client.RedditClient;
-import com.amoalla.redditube.client.model.MediaPostDto;
-import com.amoalla.redditube.client.model.Sort;
-import com.amoalla.redditube.explorer.controller.param.RequestParams;
+import com.amoalla.redditube.api.dto.MediaPostDto;
+import com.amoalla.redditube.api.dto.Sort;
+import com.amoalla.redditube.api.service.ExplorerService;
 import com.amoalla.redditube.commons.util.CaseInsensitiveEnumEditor;
+import com.amoalla.redditube.explorer.controller.param.RequestParams;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.util.StringUtils;
 import org.springframework.web.bind.WebDataBinder;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.InitBinder;
@@ -18,11 +17,12 @@ import reactor.core.publisher.Flux;
 @RestController
 public class ExplorerRestController {
 
-    private final RedditClient redditClient;
+    private final ExplorerService explorerService;
 
-    public ExplorerRestController(RedditClient redditClient) {
-        this.redditClient = redditClient;
+    public ExplorerRestController(ExplorerService explorerService) {
+        this.explorerService = explorerService;
     }
+
 
     @GetMapping("/{usernameOrSubreddit}")
     public Flux<MediaPostDto> getPosts(
@@ -30,12 +30,7 @@ public class ExplorerRestController {
             RequestParams params) {
 
         log.info("Received GET /{} with params: {}", usernameOrSubreddit, params);
-        if (StringUtils.hasText(params.getAfter())) {
-            return redditClient.getPostsAfter(usernameOrSubreddit, params.getAfter(), params.getLimit());
-        } else if (StringUtils.hasText(params.getBefore())) {
-            return redditClient.getPostsBefore(usernameOrSubreddit, params.getBefore(), params.getLimit());
-        }
-        return redditClient.getPosts(usernameOrSubreddit, params.getLimit());
+        return explorerService.getPosts(usernameOrSubreddit, params.getAfter(), params.getBefore(), params.getLimit());
     }
 
     @GetMapping("/{usernameOrSubreddit}/{sort}")
@@ -45,12 +40,7 @@ public class ExplorerRestController {
             RequestParams params) {
 
         log.info("Received GET /{} with sort: {} and params: {}", usernameOrSubreddit, sort, params);
-        if (StringUtils.hasText(params.getAfter())) {
-            return redditClient.getPostsAfter(usernameOrSubreddit, params.getAfter(), sort, params.getLimit());
-        } else if (StringUtils.hasText(params.getBefore())) {
-            return redditClient.getPostsBefore(usernameOrSubreddit, params.getBefore(), sort, params.getLimit());
-        }
-        return redditClient.getPosts(usernameOrSubreddit, sort, params.getLimit());
+        return explorerService.getPosts(usernameOrSubreddit, params.getAfter(), params.getBefore(), params.getLimit(), sort);
     }
 
     @InitBinder

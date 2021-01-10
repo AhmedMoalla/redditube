@@ -1,7 +1,8 @@
 package com.amoalla.redditube.explorer.controller;
 
+import com.amoalla.redditube.api.service.ExplorerService;
 import com.amoalla.redditube.client.RedditClient;
-import com.amoalla.redditube.client.model.Sort;
+import com.amoalla.redditube.api.dto.Sort;
 import com.amoalla.redditube.commons.CommonsConfiguration;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -28,57 +29,30 @@ class ExplorerRestControllerTest {
     private WebTestClient webClient;
 
     @MockBean
-    private RedditClient redditClient;
+    private ExplorerService explorerService;
 
     @Test
     void testGetPosts() {
         webClient.get()
-                .uri(GET_POSTS_PATH, TEST_USERNAME)
-                .exchange()
-                .expectStatus().isOk();
-        verify(redditClient).getPosts(TEST_USERNAME, RedditClient.DEFAULT_LIMIT);
-
-        webClient.get()
                 .uri(builder -> builder.path(GET_POSTS_PATH)
                         .queryParam("after", TEST_POST_ID)
-                        .build(TEST_USERNAME))
-                .exchange()
-                .expectStatus().isOk();
-        verify(redditClient).getPostsAfter(TEST_USERNAME, TEST_POST_ID, RedditClient.DEFAULT_LIMIT);
-
-        webClient.get()
-                .uri(builder -> builder.path(GET_POSTS_PATH)
                         .queryParam("before", TEST_POST_ID)
                         .build(TEST_USERNAME))
                 .exchange()
                 .expectStatus().isOk();
-        verify(redditClient).getPostsBefore(TEST_USERNAME, TEST_POST_ID, RedditClient.DEFAULT_LIMIT);
+        verify(explorerService).getPosts(TEST_USERNAME, TEST_POST_ID, TEST_POST_ID, RedditClient.DEFAULT_LIMIT);
     }
 
     @Test
     void testGetPostsWithSorting() {
         webClient.get()
-                .uri(GET_POSTS_WITH_SORTING_PATH, TEST_USERNAME, TEST_SORT.name().toLowerCase())
-                .exchange()
-                .expectStatus().isOk();
-        verify(redditClient).getPosts(TEST_USERNAME, TEST_SORT, RedditClient.DEFAULT_LIMIT);
-
-
-        webClient.get()
                 .uri(builder -> builder.path(GET_POSTS_WITH_SORTING_PATH)
                         .queryParam("after", TEST_POST_ID)
-                        .build(TEST_USERNAME, TEST_SORT.name().toLowerCase()))
-                .exchange()
-                .expectStatus().isOk();
-        verify(redditClient).getPostsAfter(TEST_USERNAME, TEST_POST_ID, TEST_SORT, RedditClient.DEFAULT_LIMIT);
-
-        webClient.get()
-                .uri(builder -> builder.path(GET_POSTS_WITH_SORTING_PATH)
                         .queryParam("before", TEST_POST_ID)
                         .build(TEST_USERNAME, TEST_SORT.name().toLowerCase()))
                 .exchange()
                 .expectStatus().isOk();
-        verify(redditClient).getPostsBefore(TEST_USERNAME, TEST_POST_ID, TEST_SORT, RedditClient.DEFAULT_LIMIT);
+        verify(explorerService).getPosts(TEST_USERNAME, TEST_POST_ID, TEST_POST_ID, RedditClient.DEFAULT_LIMIT, TEST_SORT);
     }
 
 }

@@ -1,0 +1,41 @@
+syntax = "proto3";
+option java_package = "com.amoalla.redditube.commons.api";
+
+package api;
+
+import "google/protobuf/timestamp.proto";
+
+message GetMediaPostsRequest {
+  string usernameOrSubreddit = 1;
+  string after = 2;
+  string before = 3;
+  int32 limit = 4;
+  Sort sort = 5;
+}
+
+message GetMediaPostsResponse {
+  repeated MediaPost mediaPosts = 1;
+}
+
+message MediaPost {
+  string id = 1;
+  string mediaUrl = 2;
+  string mediaThumbnailUrl = 3;
+  string username = 4;
+  string subreddit = 5;
+  string title = 6;
+  bool isEmbed = 7;
+  string embedHtml = 8;
+  google.protobuf.Timestamp creationDateTime = 9;
+}
+
+enum Sort {
+  NEW = 0;
+  HOT = 1;
+  TOP = 2;
+}
+
+service ExplorerService {
+  // Get media posts for reddit user or subreddit
+  rpc GetMediaPosts(GetMediaPostsRequest) returns (GetMediaPostsResponse) {}
+}

@@ -1,6 +1,5 @@
 package com.amoalla.redditube.mediaposts.dto;
 
-import com.amoalla.redditube.mediaposts.entity.Subscribable;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
@@ -8,7 +7,7 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 public class SubscriptionDto {
 
-    private Subscribable subscribable;
+    private SubscribableDto subscribable;
     private String error;
 
     public SubscriptionDto(String error) {

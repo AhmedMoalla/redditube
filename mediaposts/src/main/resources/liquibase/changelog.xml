@@ -4,11 +4,18 @@
         xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog
    http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-3.4.xsd">
 
-    <changeSet id="2-create-subscription-tables" author="amoalla">
+    <changeSet id="1-create-subscription-tables" author="amoalla">
         <sqlFile path="./sql/1-create-subscription-tables.sql" relativeToChangelogFile="true"/>
         <rollback>
             <dropTable tableName="subscribable"/>
             <dropTable tableName="subscription"/>
+        </rollback>
+    </changeSet>
+    <changeSet id="2-add-latest-post-id-to-subscribable" author="amoalla">
+        <sqlFile path="./sql/2-add-latest-post-id-to-subscribable.sql" relativeToChangelogFile="true"/>
+        <rollback>
+            <dropColumn tableName="subscribable" columnName="last_fetched_post_id" />
+            <dropColumn tableName="subscribable" columnName="last_fetched_post_count" />
         </rollback>
     </changeSet>
 </databaseChangeLog>

@@ -5,6 +5,7 @@ import com.amoalla.redditube.mediaposts.entity.SubscribableType;
 import com.amoalla.redditube.mediaposts.entity.Subscription;
 import com.amoalla.redditube.mediaposts.exception.AlreadySubscribedException;
 import com.amoalla.redditube.mediaposts.exception.AlreadyUnsubscribedException;
+import com.amoalla.redditube.mediaposts.exception.SubscribableNotFoundException;
 import com.amoalla.redditube.mediaposts.repository.SubscribableRepository;
 import com.amoalla.redditube.mediaposts.repository.SubscriptionRepository;
 import org.junit.jupiter.api.BeforeEach;
@@ -48,7 +49,7 @@ class SubscriptionServiceTest {
     void setUp() {
 
         testSubscribable = new Subscribable();
-        testSubscribable.setId("ID");
+        testSubscribable.setHandle("HANDLE");
         testSubscribable.setType(SubscribableType.USER);
 
         testSubscription = new Subscription();
@@ -67,9 +68,9 @@ class SubscriptionServiceTest {
     @Test
     void testSubscribe() {
 
-        when(subscriptionRepository.existsById(Mockito.any())).thenReturn(false);
+        when(subscriptionRepository.existsByUsernameAndSubscribableId(Mockito.any(), Mockito.any())).thenReturn(false);
         when(subscriptionRepository.save(Mockito.any())).thenReturn(testSubscription);
-        when(subscribableRepository.existsById(Mockito.any())).thenReturn(false);
+        when(subscribableRepository.existsByHandleAndType(Mockito.any(), Mockito.any())).thenReturn(false);
         Mono<Subscription> returnedSubscription = subscriptionService.subscribe(testSubscribable, "username");
 
         verify(subscribableRepository).save(testSubscribable);
@@ -83,15 +84,15 @@ class SubscriptionServiceTest {
     @Test
     void testSubscribeWhenAlreadySubscribed() {
 
-        when(subscriptionRepository.existsById(Mockito.any())).thenReturn(true);
+        when(subscriptionRepository.existsByUsernameAndSubscribableId(Mockito.any(), Mockito.any())).thenReturn(true);
         assertThrows(AlreadySubscribedException.class, () -> subscriptionService.subscribe(testSubscribable, "username"));
     }
 
     @Test
     void testUnsubscribe() {
 
-        when(subscriptionRepository.findById(Mockito.any())).thenReturn(Optional.of(testSubscription));
-        when(subscribableRepository.findById(Mockito.any())).thenReturn(Optional.of(testSubscribable));
+        when(subscriptionRepository.findByUsernameAndSubscribableId(Mockito.any(), Mockito.any())).thenReturn(Optional.of(testSubscription));
+        when(subscribableRepository.findByHandleAndType(Mockito.any(), Mockito.any())).thenReturn(Optional.of(testSubscribable));
         when(subscribableRepository.countSubscriptionsById(Mockito.any())).thenReturn(0L);
         Mono<Subscription> returnedSubscription = subscriptionService.unsubscribe(testSubscribable, "username");
 
@@ -106,8 +107,16 @@ class SubscriptionServiceTest {
     @Test
     void testUnsubscribeWhenAlreadyUnsubscribed() {
 
-        when(subscriptionRepository.findById(Mockito.any())).thenReturn(Optional.empty());
+        when(subscribableRepository.findByHandleAndType(Mockito.any(), Mockito.any())).thenReturn(Optional.of(testSubscribable));
+        when(subscriptionRepository.findByUsernameAndSubscribableId(Mockito.any(), Mockito.any())).thenReturn(Optional.empty());
         assertThrows(AlreadyUnsubscribedException.class, () -> subscriptionService.unsubscribe(testSubscribable, "username"));
+    }
+
+    @Test
+    void testUnsubscribeWhenSubscribableNotFound() {
+
+        when(subscribableRepository.findByHandleAndType(Mockito.any(), Mockito.any())).thenReturn(Optional.empty());
+        assertThrows(SubscribableNotFoundException.class, () -> subscriptionService.unsubscribe(testSubscribable, "username"));
     }
 
     @Test

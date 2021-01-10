@@ -8,7 +8,7 @@ import org.springframework.boot.test.autoconfigure.orm.jpa.TestEntityManager;
 
 import static org.junit.jupiter.api.Assertions.*;
 
-@DataJpaTest
+@DataJpaTest(properties = "spring.liquibase.enabled=false")
 class UserRepositoryTest {
 
     private static final String TEST_EMAIL = "user@mail.com";

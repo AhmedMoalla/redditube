@@ -3,6 +3,9 @@ spring:
     banner-mode: off
   liquibase:
     change-log: classpath:liquibase/changelog.xml
+  jackson:
+    mapper:
+      ACCEPT_CASE_INSENSITIVE_ENUMS: true
 
 # Disable Spring Security default password logging
 logging:
@@ -10,6 +13,15 @@ logging:
     org.springframework.boot.autoconfigure.security.reactive.ReactiveUserDetailsServiceAutoConfiguration: off
 
 redditube:
-  hosts:
-    explorer: http://localhost:8081
-    mediaposts: http://localhost:8082
+  services:
+    explorer-users:
+      host: localhost
+      port: 8081
+      grpc-port: 9081
+    explorer-subreddits:
+      host: localhost
+      port: -1
+      grpc-port: -1
+    media-posts:
+      host: localhost
+      port: 8082

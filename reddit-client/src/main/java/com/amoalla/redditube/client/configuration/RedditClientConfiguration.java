@@ -3,9 +3,13 @@ package com.amoalla.redditube.client.configuration;
 import com.amoalla.redditube.client.RedditClient;
 import com.amoalla.redditube.client.impl.MediaPostRequester;
 import com.amoalla.redditube.client.impl.RedditMediaClientImpl;
+import com.amoalla.redditube.api.dto.MediaPostDto;
+import com.amoalla.redditube.client.model.deserializer.MediaPostDtoDeserializer;
 import com.amoalla.redditube.client.qualifier.RedditWebClient;
+import com.fasterxml.jackson.core.Version;
 import com.fasterxml.jackson.databind.InjectableValues;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.fasterxml.jackson.databind.module.SimpleModule;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
@@ -36,7 +40,11 @@ public class RedditClientConfiguration {
     }
 
     @Bean
-    ObjectMapper configureObjectMapper(ObjectMapper objectMapper) {
+    public ObjectMapper configureObjectMapper(ObjectMapper objectMapper) {
+        SimpleModule module = new SimpleModule("MediaPostDtoDeserializer", new Version(1, 0, 0, null, null, null));
+        module.addDeserializer(MediaPostDto.class, new MediaPostDtoDeserializer());
+        objectMapper.registerModule(module);
+
         InjectableValues.Std injectables = new InjectableValues.Std();
         injectables.addValue(ObjectMapper.class, objectMapper);
         objectMapper.setInjectableValues(injectables);

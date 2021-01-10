@@ -1,11 +1,11 @@
 package com.amoalla.redditube.mediaposts.service;
 
-import com.amoalla.redditube.client.model.MediaPostDto;
+import com.amoalla.redditube.api.dto.MediaPostDto;
 import com.amoalla.redditube.mediaposts.entity.Subscribable;
 import com.amoalla.redditube.mediaposts.entity.Subscription;
-import com.amoalla.redditube.mediaposts.entity.SubscriptionId;
 import com.amoalla.redditube.mediaposts.exception.AlreadySubscribedException;
 import com.amoalla.redditube.mediaposts.exception.AlreadyUnsubscribedException;
+import com.amoalla.redditube.mediaposts.exception.SubscribableNotFoundException;
 import com.amoalla.redditube.mediaposts.repository.SubscribableRepository;
 import com.amoalla.redditube.mediaposts.repository.SubscriptionRepository;
 import lombok.extern.slf4j.Slf4j;
@@ -35,11 +35,11 @@ public class SubscriptionService {
 
     public Mono<Subscription> subscribe(Subscribable subscribable, String username) {
 
-        if (subscriptionRepository.existsById(new SubscriptionId(username, subscribable))) {
-            throw new AlreadySubscribedException(username, subscribable.getId());
+        if (subscriptionRepository.existsByUsernameAndSubscribableId(username, subscribable.getId())) {
+            throw new AlreadySubscribedException(username, subscribable.getHandle());
         }
 
-        if (!subscribableRepository.existsById(subscribable.getId())) {
+        if (!subscribableRepository.existsByHandleAndType(subscribable.getHandle(), subscribable.getType())) {
             subscribableRepository.save(subscribable);
         }
 
@@ -51,21 +51,21 @@ public class SubscriptionService {
     }
 
     public Mono<Subscription> unsubscribe(Subscribable subscribable, String username) {
-        Optional<Subscription> subscription = subscriptionRepository.findById(new SubscriptionId(username, subscribable));
-        if (subscription.isEmpty()) {
-            throw new AlreadyUnsubscribedException(username, subscribable.getId());
+        Optional<Subscribable> foundSubscribable = subscribableRepository.findByHandleAndType(subscribable.getHandle(), subscribable.getType());
+        if (foundSubscribable.isPresent()) {
+            Optional<Subscription> subscription = subscriptionRepository.findByUsernameAndSubscribableId(username, foundSubscribable.get().getId());
+            if (subscription.isEmpty()) {
+                throw new AlreadyUnsubscribedException(username, subscribable.getHandle());
+            }
+            subscriptionRepository.delete(subscription.get());
+
+            if (subscribableRepository.countSubscriptionsById(foundSubscribable.get().getId()) == 0) {
+                subscribableRepository.delete(foundSubscribable.get());
+            }
+
+            return Mono.just(subscription.get());
         }
-
-        subscriptionRepository.delete(subscription.get());
-
-        Optional<Subscribable> foundSubscribable = subscribableRepository.findById(subscribable.getId());
-        if (foundSubscribable.isPresent()
-                && subscribableRepository.countSubscriptionsById(foundSubscribable.get().getId()) == 0) {
-
-            subscribableRepository.delete(foundSubscribable.get());
-        }
-
-        return Mono.just(subscription.get());
+        throw new SubscribableNotFoundException(subscribable.getHandle());
     }
 
     public Flux<Subscribable> getSubscriptions(String username) {
