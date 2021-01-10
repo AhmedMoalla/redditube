@@ -14,7 +14,6 @@ import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.http.HttpHeaders;
 import org.springframework.test.context.ActiveProfiles;
 import org.springframework.web.reactive.function.client.WebClient;
-import org.springframework.web.util.UriComponentsBuilder;
 
 import java.io.IOException;
 
@@ -54,23 +53,25 @@ class GatewayRoutesTest implements InitializingBean {
 
     @ParameterizedTest
     @CsvSource({
-            "/u/test,/test,localhost:8081,true",
-            "/feed,/subscriptions/feed,localhost:8082,true",
-            "/subscriptions,/subscriptions,localhost:8082,false"
+            "/u/test,/test,localhost:8081",
+            "/feed,/subscriptions/feed,localhost:8082",
+            "/subscriptions,/subscriptions,localhost:8082"
     })
-    void testGatewayRoutes(String path, String forwardedPath, String forwardedHost, boolean skipConnectRequest) throws InterruptedException {
+    void testGatewayRoutes(String path, String forwardedPath, String forwardedHost) throws InterruptedException {
         webClient.get()
                 .uri(path)
                 .retrieve()
                 .toBodilessEntity()
                 .subscribe();
 
-        if (skipConnectRequest) {
-            // Skip CONNECT Request to proxy
-            mockWebServer.takeRequest();
-            mockWebServer.enqueue(new MockResponse());
-        }
+
+
         RecordedRequest recordedRequest = mockWebServer.takeRequest();
+        if (recordedRequest.getMethod().equals("CONNECT")) {
+            // Skip CONNECT Request to proxy
+            mockWebServer.enqueue(new MockResponse());
+            recordedRequest = mockWebServer.takeRequest();
+        }
         mockWebServer.enqueue(new MockResponse());
         String extractedPath = String.join("/", recordedRequest.getRequestUrl().pathSegments());
         assertEquals(forwardedPath, "/" + extractedPath);
