@@ -78,7 +78,6 @@ class AbstractMediaPostStorageListenerTest {
         }
         verify(listener.storageService).uploadMediaToStorage(TEST_MEDIA_URL, TEST_BUCKET_NAME);
         verify(listener.storageService).uploadMediaToStorage(TEST_THUMBNAIL_URL, TEST_BUCKET_NAME);
-        verify(repository).save(Mockito.any());
     }
 
     @Test
