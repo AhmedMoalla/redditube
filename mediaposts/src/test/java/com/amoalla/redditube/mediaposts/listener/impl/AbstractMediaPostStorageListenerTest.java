@@ -36,6 +36,7 @@ class AbstractMediaPostStorageListenerTest {
 
     private AbstractMediaPostStorageListener listener;
     private MediaPostDto testPost;
+    private MediaPostRepository repository;
 
     @BeforeEach
     void setUp() throws StorageException {
@@ -45,7 +46,7 @@ class AbstractMediaPostStorageListenerTest {
         testPost.setCreationDateTime(LocalDateTime.now());
         testPost.setMediaUrl(TEST_MEDIA_URL);
         testPost.setMediaThumbnailUrl(TEST_THUMBNAIL_URL);
-        MediaPostRepository repository = mock(MediaPostRepository.class);
+        repository = mock(MediaPostRepository.class);
         when(repository.save(any())).thenReturn(new MediaPost());
         StorageService storageService = mock(StorageService.class);
         when(storageService.uploadMediaToStorage(any(), any()))
@@ -71,13 +72,13 @@ class AbstractMediaPostStorageListenerTest {
         ArgumentCaptor<Callable<Void>> captor = ArgumentCaptor.forClass(Callable.class);
         listener.uploadAndSaveMediaPost(testPost, new Subscribable(), TEST_BUCKET_NAME);
         verify(scheduler, times(2)).submitListenable(captor.capture());
-        verify(listener.repository).save(Mockito.any());
         List<Callable<Void>> allValues = captor.getAllValues();
         for (Callable<Void> uploadTask : allValues) {
             uploadTask.call();
         }
         verify(listener.storageService).uploadMediaToStorage(TEST_MEDIA_URL, TEST_BUCKET_NAME);
         verify(listener.storageService).uploadMediaToStorage(TEST_THUMBNAIL_URL, TEST_BUCKET_NAME);
+        verify(repository).save(Mockito.any());
     }
 
     @Test
