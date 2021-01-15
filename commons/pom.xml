@@ -58,19 +58,6 @@
             <version>${modelmapper.version}</version>
         </dependency>
 
-        <!-- Extension to support GRpc Message mapping -->
-        <dependency>
-            <groupId>org.modelmapper.extensions</groupId>
-            <artifactId>modelmapper-protobuf</artifactId>
-            <version>${modelmapper.version}</version>
-            <exclusions>
-                <exclusion>
-                    <groupId>com.google.protobuf</groupId>
-                    <artifactId>protobuf-java</artifactId>
-                </exclusion>
-            </exclusions>
-        </dependency>
-
         <!-- GRpc Testing -->
         <dependency>
             <groupId>io.grpc</groupId>

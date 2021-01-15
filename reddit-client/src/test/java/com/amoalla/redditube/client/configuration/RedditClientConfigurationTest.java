@@ -18,11 +18,11 @@ class RedditClientConfigurationTest {
     void testRedditClientBeanPresentInContext() {
         new ApplicationContextRunner()
                 .withPropertyValues(
-                        "reddit.client-id='CLIENT_ID'",
-                        "reddit.client-secret='CLIENT_SECRET'",
-                        "reddit.username='USERNAME'",
-                        "reddit.password='PASSWORD'",
-                        "reddit.type=User")
+                        "redditube.reddit-client.client-id='CLIENT_ID'",
+                        "redditube.reddit-client.client-secret='CLIENT_SECRET'",
+                        "redditube.reddit-client.username='USERNAME'",
+                        "redditube.reddit-client.password='PASSWORD'",
+                        "redditube.reddit-client.type=User")
                 .withConfiguration(AutoConfigurations.of(RedditClientConfiguration.class))
                 .withUserConfiguration(RequiredBeansForTest.class)
                 .run(context -> assertThat(context).hasSingleBean(RedditClient.class));
@@ -32,10 +32,10 @@ class RedditClientConfigurationTest {
     void testRedditClientBeanAbsentInContextWhenNoClientId() {
         new ApplicationContextRunner()
                 .withPropertyValues(
-                        "reddit.client-secret='CLIENT_SECRET'",
-                        "reddit.username='USERNAME'",
-                        "reddit.password='PASSWORD'",
-                        "reddit.type=User")
+                        "redditube.reddit-client.client-secret='CLIENT_SECRET'",
+                        "redditube.reddit-client.username='USERNAME'",
+                        "redditube.reddit-client.password='PASSWORD'",
+                        "redditube.reddit-client.type=User")
                 .withConfiguration(AutoConfigurations.of(RedditClientConfiguration.class))
                 .withUserConfiguration(RequiredBeansForTest.class)
                 .run(context -> {

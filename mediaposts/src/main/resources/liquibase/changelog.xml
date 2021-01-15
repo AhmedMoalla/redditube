@@ -14,8 +14,14 @@
     <changeSet id="2-add-latest-post-id-to-subscribable" author="amoalla">
         <sqlFile path="./sql/2-add-latest-post-id-to-subscribable.sql" relativeToChangelogFile="true"/>
         <rollback>
-            <dropColumn tableName="subscribable" columnName="last_fetched_post_id" />
-            <dropColumn tableName="subscribable" columnName="last_fetched_post_count" />
+            <dropColumn tableName="subscribable" columnName="last_fetched_post_id"/>
+            <dropColumn tableName="subscribable" columnName="last_fetched_post_count"/>
+        </rollback>
+    </changeSet>
+    <changeSet id="3-add-media-post-table" author="amoalla">
+        <sqlFile path="./sql/3-add-media-post-table.sql" relativeToChangelogFile="true"/>
+        <rollback>
+            <dropTable tableName="media_post"/>
         </rollback>
     </changeSet>
 </databaseChangeLog>

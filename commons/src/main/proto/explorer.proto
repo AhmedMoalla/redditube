@@ -27,6 +27,9 @@ message MediaPost {
   bool isEmbed = 7;
   string embedHtml = 8;
   google.protobuf.Timestamp creationDateTime = 9;
+  bool isGallery = 10;
+  map<string, string> galleryMediaUrls = 11;
+  string embedProviderName = 12;
 }
 
 enum Sort {

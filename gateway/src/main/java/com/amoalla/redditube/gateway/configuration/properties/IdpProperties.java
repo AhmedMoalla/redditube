@@ -6,7 +6,7 @@ import org.springframework.boot.context.properties.ConfigurationProperties;
 
 @Getter
 @Setter
-@ConfigurationProperties("idp")
+@ConfigurationProperties("redditube.idp")
 public class IdpProperties {
     private String host;
     private int port;

@@ -31,4 +31,7 @@ public class Subscribable {
 
     @OneToMany(mappedBy = "subscribable")
     private List<Subscription> subscriptions;
+
+    @OneToMany(mappedBy = "owner")
+    private List<MediaPost> mediaPosts;
 }

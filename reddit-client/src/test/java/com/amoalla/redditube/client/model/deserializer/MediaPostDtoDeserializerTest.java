@@ -24,8 +24,10 @@ class MediaPostDtoDeserializerTest {
     private static final String TEST_SUBREDDIT = "TEST_SUBREDDIT";
     private static final String TEST_TITLE = "TEST_TITLE";
     private static final String TEST_HTML = "TEST_HTML";
-    private static final String TEST_MEDIA = String.format("{\"%s\":  {\"%s\":  \"%s\"}}", EMBED_KEY, HTML_KEY, TEST_HTML);
-    private static final long TEST_CREATED_UTC = Instant.now().toEpochMilli();
+    private static final String TEST_PROVIDER_NAME = "TEST_PROVIDER_NAME";
+    private static final String TEST_MEDIA = String.format("{\"%s\":  {\"%s\":  \"%s\", \"%s\":  \"%s\"}}",
+            EMBED_KEY, HTML_KEY, TEST_HTML, PROVIDER_NAME_KEY, TEST_PROVIDER_NAME);
+    private static final long TEST_CREATED_UTC = Instant.now().toEpochMilli() / 1000;
     private static ObjectMapper objectMapper;
 
     @BeforeAll
@@ -50,7 +52,7 @@ class MediaPostDtoDeserializerTest {
         assertEquals(TEST_TITLE, mediaPostDto.getTitle());
         assertTrue(mediaPostDto.isEmbed());
         assertEquals(TEST_HTML, mediaPostDto.getEmbedHtml());
-        LocalDateTime expectedCreationDate = LocalDateTime.ofInstant(Instant.ofEpochMilli(TEST_CREATED_UTC), ZoneId.systemDefault());
+        LocalDateTime expectedCreationDate = LocalDateTime.ofInstant(Instant.ofEpochSecond(TEST_CREATED_UTC), ZoneId.of("UTC"));
         assertEquals(expectedCreationDate, mediaPostDto.getCreationDateTime());
     }
 

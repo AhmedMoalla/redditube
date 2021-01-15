@@ -22,7 +22,7 @@ import org.springframework.web.reactive.function.client.WebClient;
 @Slf4j
 @Configuration
 @ComponentScan(basePackages = "com.amoalla.redditube.client")
-@ConditionalOnProperty("reddit.client-id")
+@ConditionalOnProperty("redditube.reddit-client.client-id")
 @EnableConfigurationProperties(RedditProperties.class)
 public class RedditClientConfiguration {
 
