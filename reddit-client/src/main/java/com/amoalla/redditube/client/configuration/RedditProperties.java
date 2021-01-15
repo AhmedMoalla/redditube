@@ -5,7 +5,7 @@ import lombok.Data;
 import org.springframework.boot.context.properties.ConfigurationProperties;
 
 @Data
-@ConfigurationProperties("reddit")
+@ConfigurationProperties("redditube.reddit-client")
 public class RedditProperties {
     private String redditBaseUrl = "https://www.reddit.com";
     private String redditOAuthBaseUrl = "https://oauth.reddit.com";

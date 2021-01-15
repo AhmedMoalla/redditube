@@ -6,9 +6,10 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 
 import java.time.LocalDateTime;
+import java.util.Map;
 
 @Data
-@Builder
+@Builder(toBuilder = true)
 @NoArgsConstructor
 @AllArgsConstructor
 public class MediaPostDto {
@@ -20,5 +21,8 @@ public class MediaPostDto {
     private String title;
     private boolean isEmbed;
     private String embedHtml;
+    private String embedProviderName;
     private LocalDateTime creationDateTime;
+    private boolean isGallery;
+    private Map<String, String> galleryMediaUrls;
 }

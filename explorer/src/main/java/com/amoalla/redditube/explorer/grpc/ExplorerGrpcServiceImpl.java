@@ -8,10 +8,10 @@ import com.amoalla.redditube.commons.api.Explorer.GetMediaPostsRequest;
 import com.amoalla.redditube.commons.api.Explorer.GetMediaPostsResponse;
 import com.amoalla.redditube.commons.api.Explorer.MediaPost;
 import com.amoalla.redditube.commons.api.ExplorerServiceGrpc.ExplorerServiceImplBase;
+import com.amoalla.redditube.commons.grpc.mapping.ProtoMappingUtils;
 import io.grpc.stub.StreamObserver;
 import lombok.extern.slf4j.Slf4j;
 import org.lognet.springboot.grpc.GRpcService;
-import org.modelmapper.ModelMapper;
 import reactor.core.publisher.Flux;
 
 @Slf4j
@@ -19,11 +19,9 @@ import reactor.core.publisher.Flux;
 public class ExplorerGrpcServiceImpl extends ExplorerServiceImplBase {
 
     private final ExplorerService explorerService;
-    private final ModelMapper modelMapper;
 
-    public ExplorerGrpcServiceImpl(ExplorerService explorerService, ModelMapper modelMapper) {
+    public ExplorerGrpcServiceImpl(ExplorerService explorerService) {
         this.explorerService = explorerService;
-        this.modelMapper = modelMapper;
     }
 
     @Override
@@ -44,7 +42,7 @@ public class ExplorerGrpcServiceImpl extends ExplorerServiceImplBase {
             mediaPosts = explorerService.getPosts(usernameOrSubreddit, after, before, limit, sort);
         }
 
-        Iterable<MediaPost> posts = mediaPosts.map(dto -> modelMapper.map(dto, MediaPost.Builder.class).build()).toIterable();
+        Iterable<MediaPost> posts = mediaPosts.map(ProtoMappingUtils::mapToProto).toIterable();
         GetMediaPostsResponse response = GetMediaPostsResponse.newBuilder()
                 .addAllMediaPosts(posts)
                 .build();

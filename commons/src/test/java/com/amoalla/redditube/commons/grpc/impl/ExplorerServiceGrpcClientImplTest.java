@@ -1,7 +1,6 @@
 package com.amoalla.redditube.commons.grpc.impl;
 
 import com.amoalla.redditube.api.dto.Sort;
-import com.amoalla.redditube.commons.CommonsConfiguration;
 import com.amoalla.redditube.commons.api.Explorer.GetMediaPostsRequest;
 import com.amoalla.redditube.commons.api.Explorer.GetMediaPostsResponse;
 import com.amoalla.redditube.commons.api.ExplorerServiceGrpc.ExplorerServiceImplBase;
@@ -17,7 +16,6 @@ import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.mockito.ArgumentCaptor;
 import org.mockito.ArgumentMatchers;
-import org.modelmapper.ModelMapper;
 
 import java.io.IOException;
 
@@ -69,8 +67,7 @@ class ExplorerServiceGrpcClientImplTest {
         grpcCleanup.register(channel);
 
         // Create Service
-        ModelMapper modelMapper = new CommonsConfiguration().provideModelMapper();
-        explorerService = new ExplorerServiceGrpcClientImpl(channel, modelMapper);
+        explorerService = new ExplorerServiceGrpcClientImpl(channel);
     }
 
     @AfterEach

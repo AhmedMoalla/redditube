@@ -8,7 +8,7 @@ import java.time.Duration;
 
 @Getter
 @Setter
-@ConfigurationProperties("scraper")
+@ConfigurationProperties("redditube.scraper")
 public class ScraperSchedulerProperties {
     /**
      * Period after which the next scraping task is executed after the current one has finished

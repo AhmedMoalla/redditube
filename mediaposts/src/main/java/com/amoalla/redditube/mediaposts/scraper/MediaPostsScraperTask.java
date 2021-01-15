@@ -91,15 +91,17 @@ public class MediaPostsScraperTask implements Runnable, InitializingBean {
     }
 
     private void submitTasksAndAwaitFinish(List<Tuple2<Subscribable, FetchMediaPostsSubTask>> subTasks) {
-        Phaser phaser = new Phaser();
-        phaser.bulkRegister(subTasks.size());
+        if (subTasks != null && !subTasks.isEmpty()) {
+            Phaser phaser = new Phaser();
+            phaser.bulkRegister(subTasks.size());
 
-        for (Tuple2<Subscribable, FetchMediaPostsSubTask> tuple : subTasks) {
-            var resultFuture = scheduler.submitListenable(tuple.getSecond());
-            addResultFutureCallback(resultFuture, tuple.getFirst(), phaser);
+            for (Tuple2<Subscribable, FetchMediaPostsSubTask> tuple : subTasks) {
+                var resultFuture = scheduler.submitListenable(tuple.getSecond());
+                addResultFutureCallback(resultFuture, tuple.getFirst(), phaser);
+            }
+
+            phaser.awaitAdvance(0);
         }
-
-        phaser.awaitAdvance(0);
     }
 
     private void addResultFutureCallback(ListenableFuture<FetchMediaPostsResult> resultFuture, Subscribable subscribable, Phaser phaser) {

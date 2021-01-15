@@ -7,10 +7,10 @@ import com.amoalla.redditube.commons.api.Explorer;
 import com.amoalla.redditube.commons.api.Explorer.GetMediaPostsRequest;
 import com.amoalla.redditube.commons.api.ExplorerServiceGrpc;
 import com.amoalla.redditube.commons.api.ExplorerServiceGrpc.ExplorerServiceBlockingStub;
+import com.amoalla.redditube.commons.grpc.mapping.ProtoMappingUtils;
 import io.grpc.ManagedChannel;
 import io.grpc.ManagedChannelBuilder;
 import org.assertj.core.util.VisibleForTesting;
-import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.DisposableBean;
 import reactor.core.publisher.Flux;
 
@@ -18,21 +18,18 @@ public class ExplorerServiceGrpcClientImpl implements ExplorerService, Disposabl
 
     private final ExplorerServiceBlockingStub stub;
     private final ManagedChannel channel;
-    private final ModelMapper modelMapper;
 
-    public ExplorerServiceGrpcClientImpl(String host, int grpcPort, ModelMapper modelMapper) {
+    public ExplorerServiceGrpcClientImpl(String host, int grpcPort) {
         channel = ManagedChannelBuilder.forAddress(host, grpcPort)
                 .usePlaintext()
                 .build();
         stub = ExplorerServiceGrpc.newBlockingStub(channel);
-        this.modelMapper = modelMapper;
     }
 
     @VisibleForTesting
-    ExplorerServiceGrpcClientImpl(ManagedChannel channel, ModelMapper modelMapper) {
+    ExplorerServiceGrpcClientImpl(ManagedChannel channel) {
         this.channel = channel;
         stub = ExplorerServiceGrpc.newBlockingStub(channel);
-        this.modelMapper = modelMapper;
     }
 
     @Override
@@ -53,7 +50,7 @@ public class ExplorerServiceGrpcClientImpl implements ExplorerService, Disposabl
         }
 
         return Flux.fromIterable(stub.getMediaPosts(request.build()).getMediaPostsList())
-                .map(proto -> modelMapper.map(proto, MediaPostDto.class));
+                .map(ProtoMappingUtils::mapToDto);
     }
 
     @Override

@@ -14,11 +14,11 @@ class GatewayConfigurationTest {
         new ApplicationContextRunner()
                 .withUserConfiguration(GatewayConfiguration.class)
                 .withPropertyValues(
-                        "idp.host=localhost",
-                        "idp.port=5555",
-                        "idp.realm=redditube",
-                        "idp.client-id=CLIENT_ID",
-                        "idp.client-secret=CLIENT_SECRET")
+                        "redditube.idp.host=localhost",
+                        "redditube.idp.port=5555",
+                        "redditube.idp.realm=redditube",
+                        "redditube.idp.client-id=CLIENT_ID",
+                        "redditube.idp.client-secret=CLIENT_SECRET")
                 .run(context -> {
                     assertThat(context).hasSingleBean(PasswordEncoder.class);
                     assertThat(context).hasSingleBean(IdpService.class);
