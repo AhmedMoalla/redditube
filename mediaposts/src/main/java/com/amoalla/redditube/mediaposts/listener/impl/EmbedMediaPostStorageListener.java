@@ -8,6 +8,7 @@ import com.amoalla.redditube.mediaposts.listener.resolver.EmbedUrlResolver;
 import com.amoalla.redditube.mediaposts.listener.resolver.ResolverMediaUrls;
 import com.amoalla.redditube.mediaposts.repository.MediaPostRepository;
 import com.amoalla.redditube.mediaposts.storage.StorageService;
+import com.amoalla.redditube.mediaposts.storage.cache.MediaHashCache;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.scheduling.concurrent.ThreadPoolTaskScheduler;
 import org.springframework.stereotype.Component;
@@ -25,14 +26,16 @@ public class EmbedMediaPostStorageListener extends AbstractMediaPostStorageListe
     public EmbedMediaPostStorageListener(MediaPostRepository repository,
                                          StorageService storageService,
                                          ThreadPoolTaskScheduler scheduler,
+                                         MediaHashCache mediaHashCache,
                                          List<EmbedUrlResolver> urlResolvers) {
-        super(repository, storageService, scheduler);
+        super(repository, storageService, scheduler, mediaHashCache);
         this.urlResolvers = urlResolvers.stream()
                 .collect(Collectors.toMap(EmbedUrlResolver::getProviderName, embedUrlResolver -> embedUrlResolver));
     }
 
     @Override
     public void onNewMediaPostAvailable(NewSingleMediaPostAvailableEvent event) {
+        log.debug("Embed media post available {}", event);
         MediaPostDto mediaPostDto = event.getMediaPost();
         String providerName = mediaPostDto.getEmbedProviderName();
         EmbedUrlResolver urlResolver = urlResolvers.get(providerName);
@@ -47,7 +50,7 @@ public class EmbedMediaPostStorageListener extends AbstractMediaPostStorageListe
         if (mediaUrls != null) {
             mediaPostDto.setMediaUrl(mediaUrls.getMediaUrl());
             mediaPostDto.setMediaThumbnailUrl(mediaUrls.getMediaThumbnailUrl());
-            uploadAndSaveMediaPost(mediaPostDto, event.getSubscribable(), event.getBucketName());
+            uploadAndSaveMediaPost(mediaPostDto, event.getSubscribable(), event.getBucketName(), event.getUploadCompletionCallback());
         }
     }
 

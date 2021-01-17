@@ -11,10 +11,13 @@ public class NewSingleMediaPostAvailableEvent {
     private final Subscribable subscribable;
     @Getter
     private final String bucketName;
+    @Getter
+    private final Runnable uploadCompletionCallback;
 
-    public NewSingleMediaPostAvailableEvent(Subscribable subscribable, MediaPostDto mediaPost, String bucketName) {
+    public NewSingleMediaPostAvailableEvent(Subscribable subscribable, MediaPostDto mediaPost, String bucketName, Runnable uploadCompletionCallback) {
         this.mediaPost = mediaPost;
         this.subscribable = subscribable;
         this.bucketName = bucketName;
+        this.uploadCompletionCallback = uploadCompletionCallback;
     }
 }

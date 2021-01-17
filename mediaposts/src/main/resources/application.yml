@@ -10,7 +10,7 @@ spring:
   task:
     scheduling:
       pool:
-        size: 10
+        size: 20
       thread-name-prefix: ScraperTaskScheduler
 
 server:
@@ -18,9 +18,12 @@ server:
 
 redditube:
   scraper:
-    restart-period: PT15M # 15 Minutes
+    restart-period: 15m # 15 Minutes
   minio:
     endpoint: http://localhost:9000
     access-key: minio
     secret-key: 98578652
+  media-hash-cache:
+    enabled: true
+    persistent: false
 

@@ -16,6 +16,7 @@ import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit.jupiter.SpringExtension;
 
+import java.io.ByteArrayInputStream;
 import java.io.IOException;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
@@ -29,23 +30,11 @@ class MinioStorageServiceImplTest {
     private static final String OBJECT_ID = "OBJECT_ID";
     private static final String TEST_URL = "TEST_URL";
 
-    private static MockWebServer mockWebServer;
-
     @MockBean
     private MinioClient minioClient;
 
     @Autowired
     private MinioStorageServiceImpl minioStorageService;
-
-    @BeforeAll
-    static void setUpMockWebServer() throws IOException {
-        mockWebServer = new MockWebServer();
-    }
-
-    @AfterAll
-    static void tearDown() throws IOException {
-        mockWebServer.shutdown();
-    }
 
     @BeforeEach
     void setUp() throws Exception {
@@ -63,10 +52,8 @@ class MinioStorageServiceImplTest {
 
     @Test
     void testUploadMediaToStorage() throws Exception {
-        mockWebServer.enqueue(new MockResponse().setBody(new Buffer()));
-        String mediaUrl = String.format("http://localhost:%d/file.mp4?arg1=val1", mockWebServer.getPort());
         String bucketName = minioStorageService.checkAndSanitizeBucketName("bucketName");
-        String objectId = minioStorageService.uploadMediaToStorage(mediaUrl, bucketName);
+        String objectId = minioStorageService.uploadMediaToStorage(new ByteArrayInputStream(new byte[0]), "filename.jpg", bucketName);
         assertEquals(OBJECT_ID, objectId);
         verify(minioClient).putObject(Mockito.any());
     }

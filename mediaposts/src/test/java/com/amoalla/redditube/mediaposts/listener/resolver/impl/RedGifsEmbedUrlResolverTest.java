@@ -31,6 +31,8 @@ class RedGifsEmbedUrlResolverTest {
 
     private static MockWebServer mockWebServer;
 
+    private final RedGifsEmbedUrlResolver resolver = new RedGifsEmbedUrlResolver();
+
     @BeforeAll
     static void setUpMockWebServer() {
         mockWebServer = new MockWebServer();
@@ -43,7 +45,6 @@ class RedGifsEmbedUrlResolverTest {
 
     @Test
     void testResolve() {
-        RedGifsEmbedUrlResolver resolver = new RedGifsEmbedUrlResolver();
         String embedHtml = String.format("<iframe src=\"http://localhost:%d\"/>", mockWebServer.getPort());
         mockWebServer.enqueue(new MockResponse()
                 .setBody(HTML_RESPONSE)
@@ -51,5 +52,10 @@ class RedGifsEmbedUrlResolverTest {
         ResolverMediaUrls resolve = resolver.resolve(embedHtml);
         assertEquals(MEDIA_URL, resolve.getMediaUrl());
         assertEquals(MEDIA_THUMBNAIL_URL, resolve.getMediaThumbnailUrl());
+    }
+
+    @Test
+    void testGetProviderName() {
+        assertEquals("RedGIFS", resolver.getProviderName());
     }
 }
