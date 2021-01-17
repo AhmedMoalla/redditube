@@ -8,10 +8,16 @@ import com.amoalla.redditube.mediaposts.listener.MediaPostStorageListener;
 import com.amoalla.redditube.mediaposts.repository.MediaPostRepository;
 import com.amoalla.redditube.mediaposts.scraper.event.NewMediaPostsAvailableEvent;
 import com.amoalla.redditube.mediaposts.storage.StorageService;
+import com.amoalla.redditube.mediaposts.storage.cache.MediaHashCache;
 import com.amoalla.redditube.mediaposts.storage.exception.StorageException;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.scheduling.concurrent.ThreadPoolTaskScheduler;
+import org.springframework.util.DigestUtils;
+import org.springframework.util.StringUtils;
 
+import java.io.ByteArrayInputStream;
+import java.io.InputStream;
+import java.net.URL;
 import java.util.concurrent.CompletableFuture;
 
 @Slf4j
@@ -24,11 +30,16 @@ public abstract class AbstractMediaPostStorageListener implements MediaPostStora
     protected final MediaPostRepository repository;
     protected final StorageService storageService;
     private final ThreadPoolTaskScheduler scheduler;
+    private final MediaHashCache mediaHashCache;
 
-    protected AbstractMediaPostStorageListener(MediaPostRepository repository, StorageService storageService, ThreadPoolTaskScheduler scheduler) {
+    protected AbstractMediaPostStorageListener(MediaPostRepository repository,
+                                               StorageService storageService,
+                                               ThreadPoolTaskScheduler scheduler,
+                                               MediaHashCache mediaHashCache) {
         this.repository = repository;
         this.storageService = storageService;
         this.scheduler = scheduler;
+        this.mediaHashCache = mediaHashCache;
     }
 
     @Override
@@ -36,15 +47,46 @@ public abstract class AbstractMediaPostStorageListener implements MediaPostStora
         // Do not override. Only used by CompositeMediaPostStorageListener as an @EventListener
     }
 
-    protected void uploadAndSaveMediaPost(MediaPostDto mediaPostDto, Subscribable subscribable, String bucketName) {
-        MediaPost mediaPost = mapToEntity(mediaPostDto, subscribable);
+    protected void uploadAndSaveMediaPost(MediaPostDto mediaPostDto, Subscribable subscribable, String bucketName, Runnable completionCallback) {
 
-        CompletableFuture<Void> mediaFuture = submitUploadTask(() ->
-                mediaPost.setObjectId(storageService.uploadMediaToStorage(mediaPostDto.getMediaUrl(), bucketName)));
-        CompletableFuture<Void> thumbnailFuture = submitUploadTask(() ->
-                mediaPost.setThumbnailObjectId(storageService.uploadMediaToStorage(mediaPostDto.getMediaThumbnailUrl(), bucketName)));
-        CompletableFuture.allOf(mediaFuture, thumbnailFuture)
-                .thenAcceptAsync((Void res) -> repository.save(mediaPost));
+        String mediaUrl = mediaPostDto.getMediaUrl();
+        String mediaThumbnailUrl = mediaPostDto.getMediaThumbnailUrl();
+
+        try (InputStream tempMediaData = new URL(mediaUrl).openStream()) {
+            byte[] bytes = tempMediaData.readAllBytes();
+            InputStream mediaData = new ByteArrayInputStream(bytes);
+            InputStream thumbnailMediaData = new URL(mediaThumbnailUrl).openStream();
+
+            String hash = DigestUtils.md5DigestAsHex(bytes);
+            if (!mediaHashCache.exists(hash)) {
+
+                MediaPost mediaPost = mapToEntity(mediaPostDto, subscribable);
+                mediaPost.setHash(hash);
+                mediaHashCache.add(hash);
+
+                CompletableFuture<Void> mediaFuture = submitUploadTask(() ->
+                        mediaPost.setObjectId(storageService.uploadMediaToStorage(mediaData, extractFileNameFromUrl(mediaUrl), bucketName)));
+                CompletableFuture<Void> thumbnailFuture = submitUploadTask(() ->
+                        mediaPost.setThumbnailObjectId(storageService.uploadMediaToStorage(thumbnailMediaData, extractFileNameFromUrl(mediaThumbnailUrl), bucketName)));
+                CompletableFuture.allOf(mediaFuture, thumbnailFuture)
+                        .thenAcceptAsync((Void res) -> {
+                            repository.save(mediaPost);
+                            completionCallback.run();
+                        });
+            } else {
+                completionCallback.run();
+            }
+        } catch (Exception e) {
+            log.error("Error happened while trying to upload media post {} to bucket {}", mediaPostDto, bucketName, e);
+        }
+    }
+
+    private String extractFileNameFromUrl(String mediaUrl) {
+        String fileName = StringUtils.getFilename(mediaUrl);
+        if (fileName != null && fileName.contains("?")) {
+            fileName = fileName.split("\\?")[0];
+        }
+        return fileName;
     }
 
     private CompletableFuture<Void> submitUploadTask(UploadTask uploadTask) {

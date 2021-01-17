@@ -30,20 +30,21 @@ class GalleryMediaPostStorageListenerTest {
         dto.setId("ID");
         dto.setGalleryMediaUrls(Map.of("ID1", "URL1", "ID2", "URL2"));
         String bucketName = "BUCKET_NAME";
-        var event = new NewSingleMediaPostAvailableEvent(subscribable, dto, bucketName);
+        Runnable runnable = mock(Runnable.class);
+        var event = new NewSingleMediaPostAvailableEvent(subscribable, dto, bucketName, runnable);
         listener.onNewMediaPostAvailable(event);
 
         MediaPostDto expectedDto = dto.toBuilder().build();
         expectedDto.setId("ID1");
         expectedDto.setMediaUrl("URL1");
         expectedDto.setMediaThumbnailUrl("URL1");
-        verify(listener).uploadAndSaveMediaPost(expectedDto, subscribable, bucketName);
+        verify(listener).uploadAndSaveMediaPost(expectedDto, subscribable, bucketName, runnable);
 
         expectedDto = dto.toBuilder().build();
         expectedDto.setId("ID2");
         expectedDto.setMediaUrl("URL2");
         expectedDto.setMediaThumbnailUrl("URL2");
-        verify(listener).uploadAndSaveMediaPost(expectedDto, subscribable, bucketName);
+        verify(listener).uploadAndSaveMediaPost(expectedDto, subscribable, bucketName, runnable);
     }
 
     @Test

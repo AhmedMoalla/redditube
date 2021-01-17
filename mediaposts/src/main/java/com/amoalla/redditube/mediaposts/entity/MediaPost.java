@@ -7,6 +7,7 @@ import javax.persistence.Id;
 import javax.persistence.ManyToOne;
 import javax.persistence.Table;
 import javax.validation.constraints.NotNull;
+import javax.validation.constraints.Size;
 import java.time.LocalDateTime;
 
 @Data
@@ -26,6 +27,9 @@ public class MediaPost {
     private Boolean isVideo = false;
     @NotNull
     private LocalDateTime creationDateTime;
+    @NotNull
+    @Size(min = 32, max = 32)
+    private String hash;
     @NotNull
     @ManyToOne
     private Subscribable owner;

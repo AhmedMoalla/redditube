@@ -8,6 +8,7 @@ import com.amoalla.redditube.mediaposts.entity.SubscribableType;
 import com.amoalla.redditube.mediaposts.repository.SubscribableRepository;
 import com.amoalla.redditube.mediaposts.scraper.FetchMediaPostsSubTask.FetchMediaPostsResult;
 import com.amoalla.redditube.mediaposts.scraper.configuration.ScraperSchedulerProperties;
+import com.amoalla.redditube.mediaposts.scraper.event.MediaPostsScraperTaskFinished;
 import com.amoalla.redditube.mediaposts.scraper.event.NewMediaPostsAvailableEvent;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -73,6 +74,7 @@ class MediaPostsScraperTaskTest {
         when(explorerServices.users()).thenReturn(explorerService);
         when(explorerServices.subreddits()).thenReturn(explorerService);
         when(properties.getRestartPeriod()).thenReturn(Duration.ofSeconds(10));
+        task.afterPropertiesSet();
     }
 
     @Test
@@ -106,7 +108,11 @@ class MediaPostsScraperTaskTest {
         when(scheduler.submitListenable(any(Callable.class))).thenReturn(future);
 
         task.run();
+    }
 
+    @Test
+    void testOnMediaPostsScraperTaskFinished() {
+        task.onMediaPostsScraperTaskFinished(new MediaPostsScraperTaskFinished(1));
         verify(scheduler).schedule(Mockito.eq(task), any(Instant.class));
     }
 

@@ -7,11 +7,14 @@ import com.amoalla.redditube.mediaposts.entity.SubscribableType;
 import com.amoalla.redditube.mediaposts.repository.SubscribableRepository;
 import com.amoalla.redditube.mediaposts.scraper.FetchMediaPostsSubTask.FetchMediaPostsResult;
 import com.amoalla.redditube.mediaposts.scraper.configuration.ScraperSchedulerProperties;
+import com.amoalla.redditube.mediaposts.scraper.event.MediaPostsScraperTaskFinished;
 import com.amoalla.redditube.mediaposts.scraper.event.NewMediaPostsAvailableEvent;
 import groovy.lang.Tuple2;
+import lombok.SneakyThrows;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.InitializingBean;
 import org.springframework.context.ApplicationEventPublisher;
+import org.springframework.context.event.EventListener;
 import org.springframework.scheduling.concurrent.ThreadPoolTaskScheduler;
 import org.springframework.stereotype.Component;
 import org.springframework.util.concurrent.ListenableFuture;
@@ -52,7 +55,15 @@ public class MediaPostsScraperTask implements Runnable, InitializingBean {
         scheduler.execute(this);
     }
 
+    @EventListener
+    public void onMediaPostsScraperTaskFinished(MediaPostsScraperTaskFinished event) {
+        log.info("Finished scraping {} posts in {} tasks", nbPostsScraped, event.getTotalNbTasks());
+        nbPostsScraped = 0;
+        scheduleNextScrapingTask();
+    }
+
     @Override
+    @SneakyThrows
     public void run() {
 
         Iterable<Subscribable> subscribables = repository.findAll();
@@ -76,10 +87,6 @@ public class MediaPostsScraperTask implements Runnable, InitializingBean {
         }
 
         submitTasksAndAwaitFinish(subTasks);
-        log.info("Finished scraping {} posts for {} subscribables", nbPostsScraped, subscribables.spliterator().getExactSizeIfKnown());
-        nbPostsScraped = 0;
-
-        scheduleNextScrapingTask();
     }
 
     private boolean hasNewPosts(ExplorerService service, Subscribable subscribable) {

@@ -24,4 +24,10 @@
             <dropTable tableName="media_post"/>
         </rollback>
     </changeSet>
+    <changeSet id="4-add-hash-to-media-post-table.sql" author="amoalla">
+        <sqlFile path="./sql/4-add-hash-to-media-post-table.sql" relativeToChangelogFile="true"/>
+        <rollback>
+            <dropColumn tableName="media_post" columnName="hash"/>
+        </rollback>
+    </changeSet>
 </databaseChangeLog>

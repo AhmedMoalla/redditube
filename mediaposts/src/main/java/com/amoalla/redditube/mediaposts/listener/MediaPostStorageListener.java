@@ -8,4 +8,7 @@ public interface MediaPostStorageListener {
     void onNewMediaPostsAvailableEvent(NewMediaPostsAvailableEvent event) throws StorageException;
     void onNewMediaPostAvailable(NewSingleMediaPostAvailableEvent event);
     boolean matches(MediaPostDto mediaPostDto);
+    default int getNumberOfUploadTasks(MediaPostDto dto) {
+        return 1;
+    }
 }

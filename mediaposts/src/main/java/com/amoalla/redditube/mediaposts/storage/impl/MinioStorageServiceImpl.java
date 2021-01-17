@@ -9,7 +9,6 @@ import org.springframework.stereotype.Service;
 import org.springframework.util.StringUtils;
 
 import java.io.InputStream;
-import java.net.URL;
 import java.nio.file.Files;
 import java.nio.file.Paths;
 import java.util.HashMap;
@@ -27,30 +26,21 @@ public class MinioStorageServiceImpl implements StorageService {
     }
 
     @Override
-    public String uploadMediaToStorage(String mediaUrl, String bucketName) throws StorageException {
-        log.debug("Uploading {} to bucket: {}", mediaUrl, bucketName);
-        URL url;
-        try {
-            url = new URL(mediaUrl);
-
-            String fileName = StringUtils.getFilename(mediaUrl);
-            if (fileName != null && fileName.contains("?")) {
-                fileName = fileName.split("\\?")[0];
-            }
+    public String uploadMediaToStorage(InputStream mediaData, String fileName, String bucketName) throws StorageException {
+        log.debug("Uploading file: {} to bucket {}", fileName, bucketName);
+        try (mediaData) {
             String contentType = Files.probeContentType(Paths.get(fileName));
-            try (InputStream stream = url.openStream()) {
-                Map<String, String> userMetadata = new HashMap<>();
-                ObjectWriteResponse response = minioClient.putObject(
-                        PutObjectArgs.builder()
-                                .bucket(bucketName)
-                                .object(fileName)
-                                .stream(stream, -1, 10485760)
-                                .contentType(contentType)
-                                .userMetadata(userMetadata)
-                                .build()
-                );
-                return response.object();
-            }
+            Map<String, String> userMetadata = new HashMap<>();
+            ObjectWriteResponse response = minioClient.putObject(
+                    PutObjectArgs.builder()
+                            .bucket(bucketName)
+                            .object(fileName)
+                            .stream(mediaData, -1, 10485760)
+                            .contentType(contentType)
+                            .userMetadata(userMetadata)
+                            .build()
+            );
+            return response.object();
         } catch (Exception e) {
             throw new StorageException("An error happened while trying to store MediaPost", e);
         }

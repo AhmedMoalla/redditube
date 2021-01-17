@@ -48,11 +48,12 @@ class EmbedMediaPostStorageListenerTest {
         dto.setEmbedProviderName(PROVIDER_NAME);
         String bucketName = "TEST_BUCKET";
 
-        listener.onNewMediaPostAvailable(new NewSingleMediaPostAvailableEvent(subscribable, dto, bucketName));
+        Runnable runnable = mock(Runnable.class);
+        listener.onNewMediaPostAvailable(new NewSingleMediaPostAvailableEvent(subscribable, dto, bucketName, runnable));
 
         assertEquals(MEDIA_URL, dto.getMediaUrl());
         assertEquals(MEDIA_THUMBNAIL_URL, dto.getMediaThumbnailUrl());
-        verify(listener).uploadAndSaveMediaPost(dto, subscribable, bucketName);
+        verify(listener).uploadAndSaveMediaPost(dto, subscribable, bucketName, runnable);
     }
 
     @Test
